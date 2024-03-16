@@ -1,0 +1,113 @@
+[
+    {
+        "id": 1,
+        "questionText": "What is the capital of France?",
+        "options": [
+            { "option": "A", "text": "Paris" },
+            { "option": "B", "text": "London" },
+            { "option": "C", "text": "Berlin" },
+            { "option": "D", "text": "Madrid" }
+        ],
+        "correctAnswer": "A"
+    },
+    
+    {
+        "id": 2,
+        "questionText": "What is the capital of France?",
+        "options": [
+            { "option": "A", "text": "Paris" },
+            { "option": "B", "text": "London" },
+            { "option": "C", "text": "Berlin" },
+            { "option": "D", "text": "Madrid" }
+        ],
+        "correctAnswer": "A"
+    },
+    {
+        "id": 3,
+        "questionText": "What is the capital of France?",
+        "options": [
+            { "option": "A", "text": "Paris" },
+            { "option": "B", "text": "London" },
+            { "option": "C", "text": "Berlin" },
+            { "option": "D", "text": "Madrid" }
+        ],
+        "correctAnswer": "A"
+    },
+    {
+        "id": 4,
+        "questionText": "What is the capital of France?",
+        "options": [
+            { "option": "A", "text": "Paris" },
+            { "option": "B", "text": "London" },
+            { "option": "C", "text": "Berlin" },
+            { "option": "D", "text": "Madrid" }
+        ],
+        "correctAnswer": "A"
+    },
+    {
+        "id": 5,
+        "questionText": "What is the capital of France?",
+        "options": [
+            { "option": "A", "text": "Paris" },
+            { "option": "B", "text": "London" },
+            { "option": "C", "text": "Berlin" },
+            { "option": "D", "text": "Madrid" }
+        ],
+        "correctAnswer": "A"
+    },
+    {
+        "id": 6,
+        "questionText": "What is the capital of France?",
+        "options": [
+            { "option": "A", "text": "Paris" },
+            { "option": "B", "text": "London" },
+            { "option": "C", "text": "Berlin" },
+            { "option": "D", "text": "Madrid" }
+        ],
+        "correctAnswer": "A"
+    },
+    {
+        "id": 7,
+        "questionText": "What is the capital of France?",
+        "options": [
+            { "option": "A", "text": "Paris" },
+            { "option": "B", "text": "London" },
+            { "option": "C", "text": "Berlin" },
+            { "option": "D", "text": "Madrid" }
+        ],
+        "correctAnswer": "A"
+    },
+    {
+        "id": 8,
+        "questionText": "What is the capital of France?",
+        "options": [
+            { "option": "A", "text": "Paris" },
+            { "option": "B", "text": "London" },
+            { "option": "C", "text": "Berlin" },
+            { "option": "D", "text": "Madrid" }
+        ],
+        "correctAnswer": "A"
+    },
+    {
+        "id": 9,
+        "questionText": "What is the capital of France?",
+        "options": [
+            { "option": "A", "text": "Paris" },
+            { "option": "B", "text": "London" },
+            { "option": "C", "text": "Berlin" },
+            { "option": "D", "text": "Madrid" }
+        ],
+        "correctAnswer": "A"
+    },
+    {
+        "id": 10,
+        "questionText": "What is the capital of France?",
+        "options": [
+            { "option": "A", "text": "Paris" },
+            { "option": "B", "text": "London" },
+            { "option": "C", "text": "Berlin" },
+            { "option": "D", "text": "Madrid" }
+        ],
+        "correctAnswer": "A"
+    },
+]
