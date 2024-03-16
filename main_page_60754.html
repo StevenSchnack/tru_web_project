@@ -1,0 +1,115 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<html>
+<!--Header-->
+<div id="div-home-main">
+    <div id="div-home-header" class="container-fluid p-5 my-1 bg-dark rounded-3">
+        <p style="color: rgb(225, 225, 225); text-align: center; font-size: 30;">Home</p>
+    </div>
+
+    <!--Body-->
+    <div id="div-home-content" class="row justify-content-center">
+        <div id="div-left-content" class="col-md-2 col-auto align-self-center">
+            <div class="list-group flex-md-column flex-row rounded-0">
+                <button type="button" class="list-group-item list-group-item-action active">Home</button>
+                <button type="button" class="list-group-item list-group-item-action">Profile</button>
+                <button type="button" class="list-group-item list-group-item-action">Summary</button>
+                <button type="button" class="list-group-item list-group-item-action">Leaderboard</button>
+                <button type="button" class="list-group-item list-group-item-action bg-secondary">Logout</button>
+            </div>
+        </div>
+        <div id="div-center-content" class="col-md-7 col-11 pt-2 p-1">
+            <form method="post" action="">
+                <input type="hidden" name="page" value="main-page-quiz">
+                <input type="hidden" name="command" value="quiz-submit">
+                <!--Question 1-->
+                <div id="div-question-content" class="input-group border rounded-3 p-1">
+                    <div class="col-12 p-1 border rounded-3 bg-info">
+                        <h4 style="color:white;">Question 1</h4>
+                    </div>
+                    <div class="col-12 p-2">
+                        <p id="quiz-question-description">awdaawd</p>
+                    </div>
+                    <div class="row p-4 pt-1">
+                        <div class="form-check">
+                            <input id="quiz-option-1" class="form-check-input" type="radio" name="quiz-question-1"
+                                value="A">
+                            <label class="form-check-label" for="quiz-option-1">Option 1</label>
+                        </div>
+                        <div class="form-check">
+                            <input id="quiz-option-2" class="form-check-input" type="radio" name="quiz-question-1"
+                                value="B">
+                            <label class="form-check-label" for="quiz-option-2">Option 2</label>
+                        </div>
+                        <div class="form-check">
+                            <input id="quiz-option-3" class="form-check-input" type="radio" name="quiz-question-1"
+                                value="C">
+                            <label class="form-check-label" for="quiz-option-3">Option 3</label>
+                        </div>
+                        <div class="form-check">
+                            <input id="quiz-option-4" class="form-check-input" type="radio" name="quiz-question-1"
+                                value="D">
+                            <label class="form-check-label" for="quiz-option-4">Option 4</label>
+                        </div>
+                    </div>
+                </div>
+                <!--Question 2-->
+                <div class="input-group border rounded-3 p-1">
+                    <div class="col-12 p-1 border rounded-3 bg-info">
+                        <h4 style="color:white;">Question 1</h4>
+                    </div>
+                    <div class="col-12 p-2">
+                        <p id="quiz-question-description">awdaawd</p>
+                    </div>
+                    <div class="row p-4 pt-1">
+                        <div class="form-check">
+                            <input id="quiz-option-1" class="form-check-input" type="radio" name="quiz-question-1"
+                                value="A">
+                            <label class="form-check-label" for="quiz-option-1">Option 1</label>
+                        </div>
+                        <div class="form-check">
+                            <input id="quiz-option-2" class="form-check-input" type="radio" name="quiz-question-1"
+                                value="B">
+                            <label class="form-check-label" for="quiz-option-2">Option 2</label>
+                        </div>
+                        <div class="form-check">
+                            <input id="quiz-option-3" class="form-check-input" type="radio" name="quiz-question-1"
+                                value="C">
+                            <label class="form-check-label" for="quiz-option-3">Option 3</label>
+                        </div>
+                        <div class="form-check">
+                            <input id="quiz-option-4" class="form-check-input" type="radio" name="quiz-question-1"
+                                value="D">
+                            <label class="form-check-label" for="quiz-option-4">Option 4</label>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div id="div-right-content" class="text-center col-md-3 col-auto border align-self-center">
+            <div class="container p-2">
+                <div class="col border pt-1 bg-primary rounded">
+                    <h5 style="color:white;">Quiz Progress</h5>
+                </div>
+                <p>Answered: </p>
+                <p>Time: </p>
+                <div class="row gap-2 mx-auto">
+                    <button class="btn btn-success" type="submit" value="Submit">Submit</button>
+                    <button class="btn btn-primary btn-sm" type="button" value="Save">Save for Later</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</html>
+<style>
+    #div-home-header {
+        width: 98%;
+    }
+
+    #div-center-content>form {}
+</style>
