@@ -10,7 +10,7 @@
     <!--Header-->
 
     <div id="div-home-header" class="container-fluid p-5 bg-dark rounded-0 rounded-bottom">
-        <h1 style="color: rgb(225, 225, 225); text-align: center;">Profile</h1>
+        <h1 style="color: rgb(225, 225, 225); text-align: center;">Summary</h1>
     </div>
 </head>
 
@@ -32,38 +32,27 @@
         </div>
 
         <!--Center Content-->
-        <div id="div-center-content" class="col-md-7 col-11 pt-2 p-1 d-flex flex-column align-items-center justify-content-center" style="">
-            
+        <div id="div-center-content"
+            class="col-md-7 col-11 pt-2 p-1 d-flex flex-column align-items-center justify-content-center">
             <div class="profile-content">
-                <h2 id="quiz-title" class="text-center p-5">Username</h2>
-                <ul class="list-group list-group-flush rounded-0">
-                    <li class="list-group-item" style="padding-bottom: 10px;">
-                        <p class="d-inline float-start">Email:</p>
-                        <p class="d-inline float-end">Emaiawdawdawdawawdawdawdl</p>       
-                    </li>
-                    <li class="list-group-item pt-4">
-                        <label class="d-inline float-start">Change Email</label>
-                        <input class="d-inline float-end" type="email" placeholder="Enter New Email"/>
-                    </li>
-                    <li class="list-group-item pt-4">
-                        <label class="d-inline float-start">Change Password</label>
-                        <input class="d-inline float-end" type="password" placeholder="Enter New Password"/>
-                    </li>
-                    <li class="list-group-item pt-4 form-check form-switch align-self-center">
-                        <label class="d-inline form-check-label" for="switch-set-reminder">Set Email Reminder</label>
-                        <input id="switch-set-reminder" class="d-inline form-check-input" type="checkbox" role="switch">  
-                    </li>
-                </ul>
-                <div class="row justify-content-center pt-5">
-                    <div class="col col-auto text-center">
-                        <button id="button-delete-account" class="btn btn-danger">Delete Account</button>
-                        <button id="button-cancel-changes" class="btn btn-secondary">Cancel</button>
-                        <button id="button-apply-changes" class="btn btn-success">Apply Changes</button>
+                <h2 id="summary-username" class="text-center p-5">Username</h2>
+                <div class="card">
+                    <div class="card-header dropdown">
+                        <div class="btn-group dropup">
+                            <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                Select Quiz
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><button class="dropdown-item" type="button">Quiz #1</button></li>
+                            </ul>
+                        </div>
                     </div>
-                    
+                    <div class="card-body">
+                        <h4 class="row card-title justify-content-center">Quiz Title</h4>
+                        <p class="card-text">Text</p>
+                    </div>
                 </div>
             </div>
-            
         </div>
 
         <!--Right Content-->
@@ -101,9 +90,8 @@
     }
 
     /*Center Content Styles*/
-    #div-center-content{
-        height: 680px;
-    }
+    #div-center-content {}
+
     .profile-content {
         width: 100%;
         max-width: 900px;
@@ -113,7 +101,7 @@
 
     }
 
-    .profile-content .list-group-item{
+    .profile-content .list-group-item {
         padding-bottom: 20px;
         padding-left: 50px;
         padding-right: 50px;
@@ -167,9 +155,8 @@
         #div-left-content {
             position: static;
         }
-        #div-center-content{
-            height: 500px;
-        }
+
+        #div-center-content {}
 
     }
 </style>
