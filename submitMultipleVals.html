@@ -1,0 +1,33 @@
+<form>
+Courses:
+<input id='tr1-2680' type="checkbox" name="tr1-courses[]" value="COMP2680">COMP2680
+<input id='tr1-3540' type="checkbox" name="tr1-courses[]" value="COMP3540">COMP3540
+<input id='tr1-4620' type="checkbox" name="tr1-courses[]" value="COMP4620">COMP4620
+<br>
+Cars:
+<select id='tr1-cars' name="tr1-cars[]" multiple>
+    <option value="volvo">Volvo</option>
+    <option value="saab">Saab</option>
+    <option value="opel">Opel</option>
+    <option value="audi">Audi</option>
+</select>
+<br>
+<button id='tr1-submit' type='button'>Submit</button>
+</form>
+<div id='tr1-result-1'>Result here</div>
+<div id='tr1-result-2'>Result here</div>
+<script>
+    $('#tr1-submit').click(function() {
+        var car_name = $('#tr1-cars').attr('name');  // to get the attribute
+        var car_values = $('#tr1-cars').val();  // to get the value
+        alert(car_name);
+        alert(car_values);
+        // output coming from the server will be loaded to the div
+        $('#tr1-result-1').load('//cs.tru.ca/~mlee/comp3540/Software/test_display_inputs.php', 
+            { car_name:car_values });  // Can you check the name in the output?
+                                       // Need to be careful.
+        // How about the checkboxes?
+        alert(document.getElementById('tr1-3540').checked);  // to see if it is checked
+    });
+</script>
+                    
