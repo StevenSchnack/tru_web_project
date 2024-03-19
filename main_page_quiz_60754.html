@@ -3,14 +3,14 @@
 
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" async></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" async></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!--Header-->
 
-    <div id="div-home-header" class="container-fluid p-5 bg-dark rounded-0 rounded-bottom">
-        <h1 style="color: rgb(225, 225, 225); text-align: center;">Quiz</h1>
+    <div id="div-home-header" class="container-fluid p-5 text-bg-dark rounded-0 rounded-bottom">
+        <h1 style="text-align: center;">Quizzle</h1>
     </div>
 </head>
 
@@ -21,13 +21,32 @@
 
         <!--Left Content-->
         <div class="col-md-2"></div>
-        <div id="div-left-content" class="col-md-2 col-auto align-self-center text-center">
+        <div id="div-left-content" class="col-md-2 col-auto align-self-center text-center d-none d-sm-block">
             <div class="list-group flex-md-column flex-row rounded-0">
                 <button type="button" class="list-group-item list-group-item-action active">Home</button>
                 <button type="button" class="list-group-item list-group-item-action">Profile</button>
                 <button type="button" class="list-group-item list-group-item-action">Summary</button>
                 <button type="button" class="list-group-item list-group-item-action">Leaderboard</button>
                 <button type="button" class="list-group-item list-group-item-action bg-warning">Logout</button>
+            </div>
+        </div>
+
+        <!--Left Content Small-->
+        <div id="div-left-content-sm" class="col-12 d-sm-none text-center">
+            <div class="list-group">
+                <div class="row">
+                    <div class="col-6">
+                        <button type="button" class="list-group-item list-group-item-action active">Home</button>
+                        <button type="button" class="list-group-item list-group-item-action">Profile</button>
+                    </div>
+                    <div class="col-6">
+                        <button type="button" class="list-group-item list-group-item-action">Summary</button>
+                        <button type="button" class="list-group-item list-group-item-action">Leaderboard</button>
+                    </div>
+                    <div class="col-6 mx-auto">
+                        <button type="button" class="list-group-item list-group-item-action bg-warning ">Logout</button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -38,128 +57,40 @@
                 <input type="hidden" name="command" value="quiz-submit">
                 <h2 id="quiz-title" class="text-center">Quiz #1</h2>
                 <!--Question 1-->
-                <div class="question-content input-group border rounded-3 p-1">
-                    <div class="col-12 p-1 border rounded-3 bg-info">
-                        <h4 style="color:white;">Question 1</h4>
+                <div class="question-content card">
+                    <div class="card-header text-bg-info">
+                        <h4>Question 1</h4>
                     </div>
-                    <div class="col-12 p-2">
-                        <p id="quiz-question-description">awdaawd</p>
-                    </div>
-                    <div class="row p-4 pt-1">
-                        <div class="form-check">
-                            <input id="quiz-option-1" class="form-check-input" type="radio" name="quiz-question-1"
-                                value="A">
-                            <label class="form-check-label" for="quiz-option-1">Option 1</label>
+                    <div class="card-body">
+                        <div class="card-title">
+                            <p id="quiz-question-description">awdaawd</p>
                         </div>
-                        <div class="form-check">
-                            <input id="quiz-option-2" class="form-check-input" type="radio" name="quiz-question-1"
-                                value="B">
-                            <label class="form-check-label" for="quiz-option-2">Option 2</label>
-                        </div>
-                        <div class="form-check">
-                            <input id="quiz-option-3" class="form-check-input" type="radio" name="quiz-question-1"
-                                value="C">
-                            <label class="form-check-label" for="quiz-option-3">Option 3</label>
-                        </div>
-                        <div class="form-check">
-                            <input id="quiz-option-4" class="form-check-input" type="radio" name="quiz-question-1"
-                                value="D">
-                            <label class="form-check-label" for="quiz-option-4">Option 4</label>
-                        </div>
-                    </div>
-                </div>
-                <!--Question 2-->
-                <div class="question-content input-group border rounded-3 p-1">
-                    <div class="col-12 p-1 border rounded-3 bg-info">
-                        <h4 style="color:white;">Question 1</h4>
-                    </div>
-                    <div class="col-12 p-2">
-                        <p>awdaawd</p>
-                    </div>
-                    <div class="row p-4 pt-1">
-                        <div class="form-check">
-                            <input id="quiz-option-1" class="form-check-input" type="radio" name="quiz-question-1"
-                                value="A">
-                            <label class="form-check-label" for="quiz-option-1">Option 1</label>
-                        </div>
-                        <div class="form-check">
-                            <input id="quiz-option-2" class="form-check-input" type="radio" name="quiz-question-1"
-                                value="B">
-                            <label class="form-check-label" for="quiz-option-2">Option 2</label>
-                        </div>
-                        <div class="form-check">
-                            <input id="quiz-option-3" class="form-check-input" type="radio" name="quiz-question-1"
-                                value="C">
-                            <label class="form-check-label" for="quiz-option-3">Option 3</label>
-                        </div>
-                        <div class="form-check">
-                            <input id="quiz-option-4" class="form-check-input" type="radio" name="quiz-question-1"
-                                value="D">
-                            <label class="form-check-label" for="quiz-option-4">Option 4</label>
+                        <div class="card-text input-group">
+                            <div class="row p-1 pt-2">
+                                <div class="form-check">
+                                    <input id="quiz-option-1" class="form-check-input" type="radio"
+                                        name="quiz-question-1" value="A">
+                                    <label class="form-check-label" for="quiz-option-1">Option 1</label>
+                                </div>
+                                <div class="form-check">
+                                    <input id="quiz-option-2" class="form-check-input" type="radio"
+                                        name="quiz-question-1" value="B">
+                                    <label class="form-check-label" for="quiz-option-2">Option 2</label>
+                                </div>
+                                <div class="form-check">
+                                    <input id="quiz-option-3" class="form-check-input" type="radio"
+                                        name="quiz-question-1" value="C">
+                                    <label class="form-check-label" for="quiz-option-3">Option 3</label>
+                                </div>
+                                <div class="form-check">
+                                    <input id="quiz-option-4" class="form-check-input" type="radio"
+                                        name="quiz-question-1" value="D">
+                                    <label class="form-check-label" for="quiz-option-4">Option 4</label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="question-content input-group border rounded-3 p-1">
-                    <div class="col-12 p-1 border rounded-3 bg-info">
-                        <h4 style="color:white;">Question 1</h4>
-                    </div>
-                    <div class="col-12 p-2">
-                        <p>awdaawd</p>
-                    </div>
-                    <div class="row p-4 pt-1">
-                        <div class="form-check">
-                            <input id="quiz-option-1" class="form-check-input" type="radio" name="quiz-question-1"
-                                value="A">
-                            <label class="form-check-label" for="quiz-option-1">Option 1</label>
-                        </div>
-                        <div class="form-check">
-                            <input id="quiz-option-2" class="form-check-input" type="radio" name="quiz-question-1"
-                                value="B">
-                            <label class="form-check-label" for="quiz-option-2">Option 2</label>
-                        </div>
-                        <div class="form-check">
-                            <input id="quiz-option-3" class="form-check-input" type="radio" name="quiz-question-1"
-                                value="C">
-                            <label class="form-check-label" for="quiz-option-3">Option 3</label>
-                        </div>
-                        <div class="form-check">
-                            <input id="quiz-option-4" class="form-check-input" type="radio" name="quiz-question-1"
-                                value="D">
-                            <label class="form-check-label" for="quiz-option-4">Option 4</label>
-                        </div>
-                    </div>
-                </div>
-                <div class="question-content input-group border rounded-3 p-1">
-                    <div class="col-12 p-1 border rounded-3 bg-info">
-                        <h4 style="color:white;">Question 1</h4>
-                    </div>
-                    <div class="col-12 p-2">
-                        <p>awdaawd</p>
-                    </div>
-                    <div class="row p-4 pt-1">
-                        <div class="form-check">
-                            <input id="quiz-option-1" class="form-check-input" type="radio" name="quiz-question-1"
-                                value="A">
-                            <label class="form-check-label" for="quiz-option-1">Option 1</label>
-                        </div>
-                        <div class="form-check">
-                            <input id="quiz-option-2" class="form-check-input" type="radio" name="quiz-question-1"
-                                value="B">
-                            <label class="form-check-label" for="quiz-option-2">Option 2</label>
-                        </div>
-                        <div class="form-check">
-                            <input id="quiz-option-3" class="form-check-input" type="radio" name="quiz-question-1"
-                                value="C">
-                            <label class="form-check-label" for="quiz-option-3">Option 3</label>
-                        </div>
-                        <div class="form-check">
-                            <input id="quiz-option-4" class="form-check-input" type="radio" name="quiz-question-1"
-                                value="D">
-                            <label class="form-check-label" for="quiz-option-4">Option 4</label>
-                        </div>
-                    </div>
-                </div>
-
 
             </form>
         </div>
@@ -168,8 +99,8 @@
         <div class="col-md-2"></div>
         <div id="div-right-content" class="text-center col-md-2 col-auto">
             <div class="container p-2 border rounded mx-auto">
-                <div class="row mx-auto border pt-1 bg-primary rounded" style="width: 100%;">
-                    <h5 style="color:white;">Quiz Progress</h5>
+                <div class="row mx-auto border pt-1 text-bg-primary rounded" style="width: 100%;">
+                    <h5>Quiz Progress</h5>
                 </div>
                 <div class="row mx-auto">
                     <p>Answered: </p>
@@ -178,17 +109,47 @@
                     <p>Time: </p>
                 </div>
                 <div class="row gap-2 mx-auto">
-                    <button class="btn btn-success" type="submit" value="Submit">Submit</button>
-                    <button class="btn btn-primary btn-sm" type="button" value="Save">Save for Later</button>
+                    <button id="button-submit-quiz" class="btn btn-success" type="submit" value="Submit">Submit</button>
+                    <button id="button-save-quiz" class="btn btn-primary btn-sm" type="button" value="Save">Save for
+                        Later</button>
+                </div>
+            </div>
+        </div>
+
+        <!--Submission Modal-->
+        <div id="modal-quiz-results" class="modal fade pt-5">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header text-bg-success justify-content-center">
+                        <h1 class="modal-title">Results</h1>
+                    </div>
+                    <div class="modal-body text-center">
+                        <form method="" action="">
+                            <input type="hidden" name="page" value="page-start">
+                            <input type="hidden" name="command" value="page-start-signup">
+                            <p>Score: <span>0</span></p>
+                            <p>Percent: <span>0</span></p>
+                            <p>Time: <span>0</span></p>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-warning" value="Share">
+                        <input type="button" class="btn btn-primary" data-bs-dismiss="modal" value="Continue">
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
+
 </body>
 
 </html>
-
+<script>
+    $('#button-submit-quiz').click(function () {
+        $('#modal-quiz-results').modal('show');
+    });
+</script>
 <style>
     .row {
         --bs-gutter-x: 0;
@@ -202,7 +163,7 @@
 
     .question-content {
         width: 100%;
-        max-width: 900px;
+        max-width: 700px;
         margin: auto;
         margin-bottom: 10px;
         background-color: rgb(223, 242, 255);
@@ -232,15 +193,12 @@
 
     #div-right-content .container {
         max-width: 400px;
-        background-color: rgb(243, 243, 243);
     }
 
     #div-right-content .container .row {
         width: 65%;
 
     }
-
-
 
     @media (max-width: 768px) {
         #div-right-content {
