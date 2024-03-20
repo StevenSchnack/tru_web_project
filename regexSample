@@ -1,0 +1,11 @@
+<script>
+    var text = "10 year and 100,000 Km warranty";
+    var reg = /^0|([1-9][0-9]{0,2})(,[0-9]{3})*/g; // regular expression; 
+                   // You SHOULD include the /g modifier. Otherwise the first match will be returned again and again.
+    var result = reg.test(text);
+    alert(result);
+    
+    result = text.match(reg);
+    alert(result.length + ";  " + result.join('  '));
+</script>
+                                    
