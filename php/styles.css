@@ -1,4 +1,3 @@
-/*********************Home Page Styles**********************/
 .row {
     --bs-gutter-x: 0;
 }
@@ -56,6 +55,44 @@
     padding-right: 50px;
 }
 
+/*Profile Page Styles*/
+.profile-content {
+    width: 100%;
+    max-width: 900px;
+    min-width: 200px;
+    margin: auto;
+    margin-bottom: 10px;
+
+}
+
+.profile-content .list-group-item {
+    padding-bottom: 20px;
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+
+/*Summary Page Styles*/
+.summary-content {
+    width: 100%;
+    max-width: 600px;
+    min-width: 200px;
+    margin: auto;
+    margin-bottom: 10px;
+
+}
+
+.summary-content .card-text {
+    padding: 20px;
+}
+
+.summary-content .list-group-item {
+    padding-bottom: 20px;
+    padding-top: 20px;
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
 /*Left Content Styles*/
 
 #div-left-content {
@@ -90,6 +127,7 @@
     #div-right-content {
         position: static;
         width: 80%;
+        margin-top: 40px; /*Delete if pages are messed up*/
     }
 
     #div-right-content .container {
@@ -101,14 +139,16 @@
 
     }
 
-    #leaderboard-content{
+    #leaderboard-content {
         margin-top: 40px;
     }
 
 }
-/*********************************Leaderboard Page Styles****************************/
 
-/*Center Content Styles*/
-
-
-
+@media (max-width: 576px) {
+    .profile-content .list-group-item {
+        padding-bottom: 20px;
+        padding-left: 2px;
+        padding-right: 2px;
+    }
+}

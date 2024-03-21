@@ -2,6 +2,7 @@
 <html>
 
 <head>
+    <link rel="stylesheet" href="styles.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -44,8 +45,7 @@
 
                 </div>
                 <div class="row justify-content-center pt-3 d-grid">
-                    <input id="button-forgot-password" type="button" class="btn btn-secondary"
-                        value="Forgot Password" />
+                    <input id="button-forgot-password" type="button" class="btn btn-secondary" value="Forgot Password" />
                 </div>
             </div>
 
@@ -64,13 +64,12 @@
                                 <label class="form-label" for="login-username">Username</label>
                                 <input id="login-username" name="username" type="text" class="form-control" required>
                                 <label class="form-label" for="login-password">Password</label>
-                                <input id="login-password" name="password " type="password" class="form-control"
-                                    required>
+                                <input id="login-password" name="password " type="password" class="form-control" required>
                             </form>
                         </div>
                         <div class="modal-footer">
                             <input type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" value="Cancel">
-                            <input id="button-login-submit" type="submit" class="btn btn-primary" value="Confirm">
+                            <input id="button-login-submit" type="button" class="btn btn-primary" value="Confirm">
                         </div>
                     </div>
                 </div>
@@ -92,8 +91,7 @@
                                 <label class="form-label" for="signup-email">Email</label>
                                 <input id="signup-email" type="email" class="form-control" required>
                                 <label class="form-label" for="signup-password">Password</label>
-                                <input id="signup-password" type="password" class="form-control"
-                                    pattern="^[A-Z][a-zA-Z0-9_\-]$" placeholder="Enter Password" required>
+                                <input id="signup-password" type="password" class="form-control" pattern="^[A-Z][a-zA-Z0-9_\-]$" placeholder="Enter Password" required>
                                 <p>Password must start with Uppercase letter
                                 <p>
                             </form>
@@ -135,11 +133,10 @@
 
         </div>
     </div>
-    <link rel="stylesheet" href="styles.css">
     <script>
-        $(document).ready(function () {
-            $('#button-login-submit').click(function (e) {
-                e.preventDefault(); // Prevent the default form submission
+        $(document).ready(function() {
+            $('#button-login-submit').click(function(e) {
+                e.preventDefault();
 
                 var formData = {
                     'page': 'page-start',
@@ -152,57 +149,58 @@
                     type: "POST",
                     url: "controller_60754.php",
                     data: formData,
-                    success: function (response) {
+                    success: function(response) {
                         console.log(response);
-                        $('#div-left-content, #div-right-content').removeClass('hidden');
+                        $('#modal-login').modal('hide');
                         var homeHTML = $.get('main_page_home_60754.php');
-                        $('#div-center-content').html(homeHTML); // Handle the response
+                        var leftHTML = $.get('left_content.html');
+                        var leftsmHTML= $.get('left_content_sm.html');
+                        var rightHTML = $.get('right_content.html');
+                        $('#div-left-content').html(leftHTML + leftsmHTML);
+                        $('#div-right-content').html(rightHTML);
+                        $('#div-body-content').html(homeHTML);
+                        
                     },
-                    error: function (xhr, status, error) {
-                        console.error(error); // Handle errors
+                    error: function(xhr, status, error) {
+                        console.error(error);
                     }
                 });
             });
-        })
+        });
 
+        $('#button-submit-quiz').click(function() {
+            $('#modal-quiz-results').modal('show');
+        });
 
-        $('#button-login').click(function () {
+        $('#button-login').click(function() {
             $('#modal-login').modal('show');
         });
 
-        $('#button-signup').click(function () {
+        $('#button-signup').click(function() {
             $('#modal-signup').modal('show');
         });
 
-        $('#button-forgot-password').click(function () {
+        $('#button-forgot-password').click(function() {
             $('#modal-forgot-password').modal('show');
         });
 
-        $('#button-login-submit').click()
+        // $('#button-login-submit').click(loadPage);
 
-        function loadPageStyles(pageName) {
-            $.get(pageName + ".css", function (css) {
-                $("#dynamic-styles").html(css);
-            });
-        }
-
-        function loadPage(url, page, data, callback) {
+        function loadPage(page, data, callback) {
             $.ajax({
                 type: POST,
-                url: url,
+                url: 'controller_60754.php',
                 data: data,
-                success: function (response) {
+                success: function(response) {
                     console.log(response);
-                    loadPageStyles(page);
                     var pageHTML = $.get(page);
 
                 },
-                error: function (xhr, status, error) {
-                    console.error(error); // Handle errors
+                error: function(xhr, status, error) {
+                    console.error(error);
                 }
             });
         }
-
     </script>
 </body>
 
