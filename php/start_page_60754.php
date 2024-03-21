@@ -152,22 +152,74 @@
                     success: function(response) {
                         console.log(response);
                         $('#modal-login').modal('hide');
-                        var homeHTML = $.get('main_page_home_60754.php');
-                        var leftHTML = $.get('left_content.html');
-                        var leftsmHTML= $.get('left_content_sm.html');
-                        var rightHTML = $.get('right_content.html');
-                        $('#div-left-content').html(leftHTML + leftsmHTML);
-                        $('#div-right-content').html(rightHTML);
-                        $('#div-body-content').html(homeHTML);
-                        
+                        $('#div-left-content').html(response.leftContent);
+                        $('#div-left-content-sm').html(response.leftContentSm);
+                        $('#div-body-content').html(response.bodyContent);
+                        $('#div-right-content').html(response.rightContent);
                     },
                     error: function(xhr, status, error) {
                         console.error(error);
                     }
+
                 });
             });
         });
 
+        // $(document).ready(function() {
+        //     $('#button-login-submit').click(function(e) {
+        //         e.preventDefault();
+
+        //         var formData = {
+        //             'page': 'page-start',
+        //             'command': 'login',
+        //             'username': $('#login-username').val(),
+        //             'password': $('#login-password').val()
+        //         };
+
+        //         $.ajax({
+        //             type: "POST",
+        //             url: "controller_60754.php",
+        //             data: formData,
+        //             dataType: 'json',
+        //             success: function(response) {
+        //                 console.log(response);
+        //                 $('#modal-login').modal('hide');
+        //                 if (response.success) {
+        //                     // Use $.get to fetch the HTML content
+        //                     $.get('main_page_home_60754.php', function(homeContent) {
+        //                         $('#div-body-content').html(homeContent);
+
+        //                         // Use $.post to send additional data and fetch updated content
+        //                         var quizId = 1; // Assuming you want to fetch quiz data for quiz with id 1
+        //                         $.post('get_quiz_data.php', {
+        //                             quizId: quizId
+        //                         }, function(quizData) {
+        //                             $('#quiz-content').html(quizData.quizContent);
+        //                         }, 'json');
+        //                     });
+
+        //                     $.get('left_content.html', function(leftContent) {
+        //                         $('#div-left-content').html(leftContent);
+        //                     });
+
+        //                     $.get('left_content_sm.html', function(leftContentSm) {
+        //                         $('#div-left-content-sm').html(leftContentSm);
+        //                     });
+
+        //                     $.get('right_content.html', function(rightContent) {
+        //                         $('#div-right-content').html(rightContent);
+        //                     });
+        //                 } else {
+        //                     // Handle error case
+        //                     alert(response.message);
+        //                 }
+        //             },
+        //             error: function(xhr, status, error) {
+        //                 console.error(error);
+        //             }
+        //         });
+        //     });
+        // });
         $('#button-submit-quiz').click(function() {
             $('#modal-quiz-results').modal('show');
         });
