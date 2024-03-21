@@ -1,0 +1,114 @@
+/*********************Home Page Styles**********************/
+.row {
+    --bs-gutter-x: 0;
+}
+
+#div-home-header {
+    width: 98%;
+}
+
+/*Center Content Styles*/
+
+/*Start Page Styles*/
+#div-start-content {
+    width: 100%;
+    max-width: 700px;
+    margin: auto;
+    margin-bottom: 10px;
+}
+
+#button-login {
+    padding: 10px 70px;
+}
+
+#button-signup {
+    padding: 10px 50px;
+}
+
+/*Quiz Page Styles*/
+.question-content {
+    width: 100%;
+    max-width: 700px;
+    margin: auto;
+    margin-bottom: 10px;
+    background-color: rgb(223, 242, 255);
+}
+
+/*Leaderboard Page Styles*/
+#leaderboard-content {
+    width: 100%;
+    max-width: 600px;
+    min-width: 200px;
+    margin: auto;
+    margin-bottom: 10px;
+    margin-top: 100px;
+
+}
+
+#leaderboard-content .card-text {
+    padding: 20px;
+}
+
+#leaderboard-content .list-group-item {
+    padding-bottom: 20px;
+    padding-top: 20px;
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+/*Left Content Styles*/
+
+#div-left-content {
+    top: 40%;
+    left: 0px;
+    position: fixed;
+}
+
+#div-left-content .list-group {
+    width: 100%;
+    max-width: 500px;
+}
+
+/*Right Content Styles*/
+
+#div-right-content {
+    top: 40%;
+    right: 0px;
+    position: fixed;
+}
+
+#div-right-content .container {
+    max-width: 400px;
+}
+
+#div-right-content .container .row {
+    width: 65%;
+
+}
+
+@media (max-width: 768px) {
+    #div-right-content {
+        position: static;
+        width: 80%;
+    }
+
+    #div-right-content .container {
+        width: 100%;
+    }
+
+    #div-left-content {
+        position: static;
+
+    }
+
+    #leaderboard-content{
+        margin-top: 40px;
+    }
+
+}
+/*********************************Leaderboard Page Styles****************************/
+
+/*Center Content Styles*/
+
+
+
