@@ -23,6 +23,7 @@
 #button-signup {
     padding: 10px 50px;
 }
+/*Home Page Styles*/
 
 /*Quiz Page Styles*/
 .question-content {
@@ -31,6 +32,10 @@
     margin: auto;
     margin-bottom: 10px;
     background-color: rgb(223, 242, 255);
+}
+
+.question-content > h4{
+    color: white;
 }
 
 /*Leaderboard Page Styles*/

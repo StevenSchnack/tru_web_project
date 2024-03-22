@@ -1,4 +1,3 @@
-        <div id="div-center-content" class="col-md-7 col-12 pt-2 p-1 d-flex flex-column align-items-center justify-content-center">
             <div class="profile-content">
                 <h2 id="profle-username" class="text-center p-5">Username</h2>
                 <ul class="list-group list-group-flush rounded-0">
@@ -27,4 +26,3 @@
                     </div>
                 </div>
             </div>
-        </div>

@@ -1,49 +1,17 @@
 <!--Center Content-->
-<div id="div-center-content" class="col-md-8 col-11 pt-2 p-1 align-items-center ">
-    <form method="post" action="">
-        <input type="hidden" name="page" value="main-page-quiz">
-        <input type="hidden" name="command" value="quiz-submit">
-        <h2 id="quiz-title" class="text-center">Quiz #1</h2>
-        <!--Question 1-->
-        <div class="question-content card">
-            <div class="card-header text-bg-info">
-                <h4>Question 1</h4>
-            </div>
-            <div class="card-body">
-                <div class="card-title">
-                    <p id="quiz-question-description">awdaawd</p>
-                </div>
-                <div class="card-text input-group">
-                    <div class="row p-1 pt-2">
-                        <div class="form-check">
-                            <input id="quiz-option-1" class="form-check-input" type="radio" name="quiz-question-1"
-                                value="A">
-                            <label class="form-check-label" for="quiz-option-1">Option 1</label>
-                        </div>
-                        <div class="form-check">
-                            <input id="quiz-option-2" class="form-check-input" type="radio" name="quiz-question-1"
-                                value="B">
-                            <label class="form-check-label" for="quiz-option-2">Option 2</label>
-                        </div>
-                        <div class="form-check">
-                            <input id="quiz-option-3" class="form-check-input" type="radio" name="quiz-question-1"
-                                value="C">
-                            <label class="form-check-label" for="quiz-option-3">Option 3</label>
-                        </div>
-                        <div class="form-check">
-                            <input id="quiz-option-4" class="form-check-input" type="radio" name="quiz-question-1"
-                                value="D">
-                            <label class="form-check-label" for="quiz-option-4">Option 4</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </form>
-</div>
+<form method="post" action="">
+    <input type="hidden" name="page" value="main-page-quiz">
+    <input type="hidden" name="command" value="quiz-submit">
+    <h2 id="quiz-title" class="text-center">Quiz #1</h2>
+    <!--Question 1-->
+    <div id="div-content-quiz">
+        
+    </div>
+</form>
+
 
 <!--Submission Modal-->
-<div id="modal-quiz-results" class="modal fade pt-5">
+<!-- <div id="modal-quiz-results" class="modal fade pt-5">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header text-bg-success justify-content-center">
@@ -64,4 +32,4 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
