@@ -17,11 +17,9 @@ function isValidLogin($username, $password)
 function createNewUser($username, $password, $email)
 {
     global $conn;
-    //$current_date = date("Ymd");
-    $sql = "INSERT INTO users VALUES (NULL, '$username', '$password', '$email');";
-
+    $sql = "INSERT INTO users (username, password, email) VALUES ('$username', '$password', '$email');";
     $result = mysqli_query($conn, $sql);
-
+    
     return $result;
 }
 
@@ -31,7 +29,7 @@ function isValidUsername($username)
     $sql = "SELECT username FROM users WHERE '$username' = username";
     $result = mysqli_query($conn, $sql);
 
-    if (mysqli_num_rows($result))
+    if (!mysqli_num_rows($result))
         return true;
     else
         return false;
@@ -76,4 +74,39 @@ function getQuizData()
     mysqli_close($conn);
     return $quizData;
     
+}
+
+function buildQuiz($quizData)
+{
+    $quizHTML = '';
+    $questionCount = 1;
+    foreach ($quizData['questions'] as $question) {
+        $optionCount = 1;
+        $quizHTML .= '<div class="question-content card">';
+        //Header
+        $quizHTML .= '<div class="card-header text-bg-info">';
+        $quizHTML .= '<h4> Question ' . $questionCount . '</h4>';
+        $quizHTML .= '</div>';
+        //Title
+        $quizHTML .= '<div class="card-body">';
+        $quizHTML .= '<div class="card-title">';
+        $quizHTML .= '<p>' . $question['description'] . '</p>';
+        $quizHTML .= '</div>';
+        //Body
+        $quizHTML .= '<div class="card-text input-group">';
+        $quizHTML .= '<div class="row p-1 pt-2">';
+        foreach ($question['options'] as $option) {
+            $quizHTML .= '<div class="form-check">';
+            $quizHTML .= '<input id="quiz-option-' . $option['option_id'] . '" class="form-check-input" type="radio" name="quiz-question-' . $questionCount . '" value="' . $option['is_correct'] . '">';
+            $quizHTML .= '<label class="form-check-label" for="quiz-option-' . $option['option_id'] . '">' . $option['description'] . '</label>';
+            $quizHTML .= '</div>';
+            $optionCount++;
+        }
+        $quizHTML .= '</div>';
+        $quizHTML .= '</div>';
+        $quizHTML .= '</div>';
+        $quizHTML .= '</div>';
+        $questionCount++;
+    }
+    return $quizHTML;
 }

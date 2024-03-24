@@ -38,6 +38,9 @@
     color: white;
 }
 
+.form-check{
+    border-radius: 4px;
+}
 /*Leaderboard Page Styles*/
 #leaderboard-content {
     width: 100%;

@@ -2,7 +2,7 @@
 
         <div id="div-home-content" class="text-center pt-4">
             <h2 id="start-welcome-text" class="pt-4 p-2">Welcome, Username!</h2>
-            <div id="button-start-quiz" class="btn btn-primary btn-lg" type="button">Start Quiz</div>
+            <div id="button-start-quiz" class="btn btn-primary btn-lg" type="button" onclick="startTimer()" >Start Quiz</div>
         </div>
         <!--Submission Modal-->
         <!-- <div id="modal-quiz-results" class="modal fade pt-5">

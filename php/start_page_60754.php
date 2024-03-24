@@ -1,3 +1,11 @@
+<?php
+if (!isset($_SERVER['HTTPS'])) {
+    $url = 'https://' . $_SERVER['HTTP_HOST'] .
+        $_SERVER['REQUEST_URI'];  // starts with /...
+    header("Location: " . $url);  // Redirect - 302
+    exit;                         // should be before any output
+}
+?>
 <!doctype html>
 <html>
 
@@ -86,12 +94,12 @@
                             <input type="hidden" name="page" value="page-start">
                             <input type="hidden" name="command" value="signup">
                             <label class="form-label" for="signup-username">Username</label>
-                            <input id="signup-username" type="text" class="form-control" required>
+                            <input id="signup-username" name="username" type="text" class="form-control" required>
                             <label class="form-label" for="signup-email">Email</label>
-                            <input id="signup-email" type="email" class="form-control" required>
+                            <input id="signup-email" name="email" type="email" class="form-control" required>
                             <label class="form-label" for="signup-password">Password</label>
-                            <input id="signup-password" type="password" class="form-control" pattern="^[A-Z][a-zA-Z0-9_\-]$" placeholder="Enter Password" required>
-                            <p>Password must start with Uppercase letter</p>
+                            <input id="signup-password" name="password" type="password" class="form-control" pattern="^[A-Z].{5,20}$" placeholder="Enter Password" required>
+
                         </div>
                         <div class="modal-footer">
                             <input type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" value="Cancel">
@@ -125,6 +133,30 @@
             </div>
         </div>
 
+        <!-- Submission Modal-->
+        <div id="modal-quiz-results" class="modal fade pt-5">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header text-bg-success justify-content-center">
+                        <h1 class="modal-title">Results</h1>
+                    </div>
+                    <div class="modal-body text-center">
+                        <form id="form-quiz-results" method="post" action="controller_60754.php">
+                            <input type="hidden" name="page" value="page-main">
+                            <input type="hidden" name="command" value="submit-quiz">
+                            <p id="quiz-score" name="score" value="">Score: 0</p>
+                            <p id="quiz-percent" name="percent" value="">Percent: 0%</p>
+                            <p id="quiz-time-final" name="time" value="">Time: 0:00</p>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-warning" value="Share">
+                        <input type="button" class="btn btn-primary" data-bs-dismiss="modal" value="Continue">
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!--Right Content-->
         <div class="col-md-2"></div>
         <div id="div-right-content" class="text-center col-md-2 col-auto">
@@ -135,13 +167,14 @@
     <script>
         //Form Submissions
         $(document).ready(function() {
-            $('form').submit(function(e) {
+            $(document).on('submit', 'form', function(e) {
                 e.preventDefault();
 
                 var formData = $(this).serialize();
                 var formType = $(this).attr('method');
                 var formUrl = $(this).attr('action');
                 var formId = $(this).attr('id');
+                console.log(formData);
 
                 $.ajax({
                     type: formType,
@@ -152,7 +185,6 @@
 
                         switch (formId) {
                             case 'form-login':
-
                                 $('#modal-login').modal('hide');
                                 $.get('main_page_home_60754.php', function(homeContent) {
                                     $('#div-center-content').html(homeContent);
@@ -171,12 +203,41 @@
                                 });
                                 break;
                             case 'form-signup':
-
+                                $('#modal-signup').modal('hide');
+                                alert(response.message);
                                 break;
 
                             case 'form-forgot-password':
 
                                 break;
+
+                            case 'form-submit-quiz':
+                                $('#right-content-answered').text('Answered: 0/10');
+                                $('#quiz-score').val(response.data.score);
+                                $('#quiz-percent').val(response.data.percent);
+                                $('#quiz-score').text('Score: ' + response.data.score + '/10');
+                                $('#quiz-percent').text('Percent: ' + response.data.percent + '%');
+                                if (secondsDisplay < 10) {
+                                    $('#quiz-time-final').text('Time: ' + minutes + ':' + '0' + secondsDisplay);
+                                    $('#quiz-time-final').val(minutes + ':' + '0' + secondsDisplay);
+                                } else {
+                                    $('#quiz-time-final').text('Time: ' + minutes + ':' + secondsDisplay);
+                                    $('#quiz-time-final').val(minutes + ':' + secondsDisplay);
+                                }
+                                $('#button-submit-quiz').prop('disabled', true);
+                                $('#button-save-quiz').prop('disabled', true);
+                                var radioButtons = $('.form-check input[type="radio"]');
+                                $(radioButtons).each(function() {
+                                    if ($(this).attr('value') == '1') {
+                                        $(this).parent().css('background-color', 'lightgreen');
+                                    } else if($(this).attr('value') == '0' && $(this).is(':checked')) {
+                                        $(this).parent().css('background-color', 'rgb(255, 72, 72)');
+                                    }
+                                })
+                                break;
+
+                            case 'form-quiz-results':
+
                         }
                     },
                     error: function(xhr, status, error) {
@@ -184,7 +245,7 @@
                     }
                 });
             });
-            //Nav Buttons
+            //Left Nav Buttons
             $(document).on('click', '#nav-buttons-left button', function() {
                 var buttonId = $(this).attr('id');
                 switch (buttonId) {
@@ -221,21 +282,41 @@
                 $(this).addClass('active');
             });
 
+            //Right Nav Buttons
+            $(document).on('click', '#nav-buttons-right button', function() {
+                var buttonId = $(this).attr('id');
+                switch (buttonId) {
+                    case 'button-submit-quiz':
+                        $('#form-submit-quiz').submit();
+                        $('#modal-quiz-results').modal('show');
+
+                        break;
+
+                    case 'button-save-quiz':
+
+
+                }
+            });
+
+            //Start Quiz
             $(document).on('click', '#button-start-quiz', function() {
                 $.ajax({
                     url: 'controller_60754.php',
                     type: 'POST',
-                    data: { 
+                    data: {
                         page: "page-main",
-                        command: "start-quiz"},
+                        command: "start-quiz"
+                    },
                     success: function(obj) {
                         console.log(obj);
                         if (obj.success) {
                             $.get('main_page_quiz_60754.php', function(quizContent) {
                                 $('#div-center-content').html(quizContent);
-                                $('#div-content-quiz').html(obj.data); // Insert the HTML into the DOM
+                                $('#div-content-quiz').html(obj.data);
+                                $('#button-submit-quiz').prop('disabled', false);
+                                $('#button-save-quiz').prop('disabled', false);
                             });
-                            
+
                             console.log(obj.data);
                         } else {
                             console.error('Failed to load quiz:', obj.message);
@@ -246,11 +327,24 @@
                     }
                 });
             })
+
+            //Quiz Radio Button Count
+            $(document).on('click', '.form-check input[type="radio"]', function() {
+                var answered = 0;
+                var radioButtons = $('.form-check input[type="radio"]');
+                $(radioButtons).each(function() {
+                    if ($(this).is(':checked')) {
+                        answered++;
+                    }
+                })
+                console.log(answered);
+                $('#right-content-answered').text('Answered: ' + answered + '/10');
+            })
+
         });
 
-        $('#button-submit-quiz').click(function() {
-            $('#modal-quiz-results').modal('show');
-        });
+
+
 
         $('#button-login').click(function() {
             $('#modal-login').modal('show');
@@ -266,8 +360,6 @@
 
 
 
-        // $('#button-login-submit').click(loadPage);
-
         function loadPage(page, data, callback) {
             $.ajax({
                 type: POST,
@@ -282,6 +374,36 @@
                     console.error(error);
                 }
             });
+        }
+
+        //Quiz Timer
+        let timer;
+        let seconds = 0;
+        let minutes = 0;
+        let secondsDisplay = 0;
+
+        function startTimer() {
+            clearInterval(timer);
+            timer = setInterval(function() {
+                seconds++;
+                minutes = Math.floor(seconds / 60);
+                secondsDisplay = seconds % 60;
+                if (secondsDisplay < 10) {
+                    $('#right-content-timer').text('Time: ' + minutes + ':' + '0' + secondsDisplay);
+                } else {
+                    $('#right-content-timer').text('Time: ' + minutes + ':' + secondsDisplay);
+                }
+            }, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(timer);
+        }
+
+        function resetTimer() {
+            clearInterval(timer);
+            seconds = 0;
+            $('#right-content-timer').text('Time: ' + '0:00');
         }
     </script>
 </body>
