@@ -2,7 +2,7 @@
 
 session_start();
 require('model_60754.php');
-header('Content-Type: application/json');
+
 //If Page == empty
 if (empty($_POST['page'])) {
     include('start_page_60754.php');
@@ -27,10 +27,10 @@ if ($_POST['page'] == 'page-start') {
                 
                 $_SESSION['signedin'] = 'YES';
                 $_SESSION['username'] = $username;
-                //header('Content-Type: application/json');
+                header('Content-Type: application/json');
                 echo json_encode(['success' => true, 'message' => 'Login successful.']);
             } else {
-                //header('Content-Type: application/json');
+                header('Content-Type: application/json');
                 echo json_encode(['success' => false, 'message' => 'Credentials are incorrect.']);
             }
             exit();
@@ -42,14 +42,14 @@ if ($_POST['page'] == 'page-start') {
 
             if (isValidUsername($username)) {
                 if (createNewUser($username, $password, $email)) {
-                    //header('Content-Type: application/json');
+                    header('Content-Type: application/json');
                     echo json_encode(['success' => true, 'message' => 'Account creation was succesful!']);
                 } else {
-                    //header('Content-Type: application/json');
+                    header('Content-Type: application/json');
                     echo json_encode(['success' => false, 'message' => 'Something went wrong. Please try again']);
                 }
             } else {
-                //header('Content-Type: application/json');
+                header('Content-Type: application/json');
                 echo json_encode(['success' => false, 'message' => 'Username is already taken. Please choose another one', 'data' => $username]);
             }
             exit();
@@ -58,10 +58,10 @@ if ($_POST['page'] == 'page-start') {
             $email = $_POST['email'];
             $resetCode = rand(10000, 99999);
             if (forgotPassword($resetCode, $email)) {
-                //header('Content-Type: application/json');
+                header('Content-Type: application/json');
                 echo json_encode(['success' => true, 'message' => 'Password reset initiated! Copy this reset code and press continue: ', 'data' => $resetCode]);
             } else {
-                //header('Content-Type: application/json');
+                header('Content-Type: application/json');
                 echo json_encode(['success' => false, 'message' => 'Email not found. Please try again']);
             }
 
@@ -71,10 +71,10 @@ if ($_POST['page'] == 'page-start') {
             $resetCode = $_POST['reset-code'];
             $newPassword = hash('sha256', $_POST['password']);
             if (resetPassword($resetCode, $newPassword)) {
-                //header('Content-Type: application/json');
+                header('Content-Type: application/json');
                 echo json_encode(['success' => true, 'message' => 'Password has been reset! You may now sign-in with your new password']);
             } else {
-                //header('Content-Type: application/json');
+                header('Content-Type: application/json');
                 echo json_encode(['success' => false, 'message' => 'Password reset failed. Please try again']);
             }
             exit();
@@ -95,14 +95,14 @@ else if ($_POST['page'] == 'page-main') {
         case 'signout':
             session_unset();
             session_destroy();
-            //header('Content-Type: application/json');
+            header('Content-Type: application/json');
             echo json_encode(['success' => true, 'message' => 'User was signed out']);
             exit();
 
         case 'start-quiz':
             $quizData = getQuizData();
             $quizHTML = buildQuiz($quizData);
-            //header('Content-Type: application/json');
+            header('Content-Type: application/json');
             echo json_encode(['success' => true, 'message' => 'Quiz was Constructed', 'data' => $quizHTML]);
             exit();
 
@@ -118,7 +118,7 @@ else if ($_POST['page'] == 'page-main') {
                 }
             }
             $percent = ($correct / 10) * 100;
-            //header('Content-Type: application/json');
+            header('Content-Type: application/json');
             echo json_encode(['success' => true, 'message' => 'Results are in', 'data' => ['score' => $correct, 'percent' => $percent]]);
             exit();
     }
