@@ -1,6 +1,15 @@
 <!--Center Content-->
 <div class="summary-content">
-    <h2 id="summary-username" class="text-center p-5">Username</h2>
+    <h2 id="summary-username" class="text-center p-5">
+        <?php
+        session_start();
+        if (isset($_SESSION['username'])) {
+            echo ($_SESSION['username']);
+        } else {
+            echo "Guest";
+        }
+        ?>
+    </h2>
     <div class="card mb-3">
         <div class="card-header dropdown">
             <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">

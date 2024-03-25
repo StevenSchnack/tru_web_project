@@ -1,22 +1,19 @@
 <?php
 if (!isset($_SERVER['HTTPS'])) {
     $url = 'https://' . $_SERVER['HTTP_HOST'] .
-        $_SERVER['REQUEST_URI'];  // starts with /...
-    header("Location: " . $url);  // Redirect - 302
-    exit;                         // should be before any output
+        $_SERVER['REQUEST_URI'];
+    header("Location: " . $url);
+    exit;
 }
 ?>
 <!doctype html>
 <html>
-
 <head>
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
-
 <body>
     <!--Header-->
     <div id="div-home-header" class="container-fluid p-5 text-bg-dark rounded-0 rounded-bottom">
@@ -28,18 +25,12 @@ if (!isset($_SERVER['HTTPS'])) {
         <!--Left Content-->
         <div class="col-md-2"></div>
 
-        <div id="div-left-content" class="col-md-2 col-auto align-self-center text-center d-none d-sm-block ">
-
-        </div>
+        <div id="div-left-content" class="col-md-2 col-auto align-self-center text-center d-none d-sm-block "></div>
 
         <!--Left Content Small-->
-        <div id="div-left-content-sm" class="col-12 d-sm-none text-center">
-
-        </div>
-
+        <div id="div-left-content-sm" class="col-12 d-sm-none text-center"></div>
 
         <!--Body-->
-
         <div id="div-center-content" class="col-md-7 col-11 pt-2 p-1 align-items-center">
             <div class="row">
                 <img src="">
@@ -55,7 +46,6 @@ if (!isset($_SERVER['HTTPS'])) {
                 <input id="button-forgot-password" type="button" class="btn btn-secondary" value="Forgot Password" />
             </div>
         </div>
-
 
         <!--Login Modal-->
         <div id="modal-login" class="modal fade pt-5">
@@ -99,7 +89,7 @@ if (!isset($_SERVER['HTTPS'])) {
                             <input id="signup-email" name="email" type="email" class="form-control" required>
                             <label class="form-label" for="signup-password">Password</label>
                             <input id="signup-password" name="password" type="password" class="form-control" pattern="^[A-Z].{5,20}$" placeholder="Enter Password" required>
-
+                            <p class="text-end">Password must start with an <u>uppercase</u> letter</p>
                         </div>
                         <div class="modal-footer">
                             <input type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" value="Cancel">
@@ -122,7 +112,33 @@ if (!isset($_SERVER['HTTPS'])) {
                             <input type="hidden" name="page" value="page-start">
                             <input type="hidden" name="command" value="forgot-password">
                             <label class="form-label" for="forgot-password-email">Email</label>
-                            <input id="forgot-password-email" type="email" class="form-control" required>
+                            <input id="forgot-password-email" name="email" type="email" class="form-control" required>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" value="Cancel">
+                            <input type="submit" class="btn btn-primary" value="Confirm">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!--Reset Password-->
+        <div id="modal-reset-password" class="modal fade pt-5">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header text-bg-secondary justify-content-center">
+                        <h1 class="modal-title">Reset Password</h1>
+                    </div>
+                    <form id="form-reset-password" method="post" action="controller_60754.php">
+                        <div class="modal-body">
+                            <input type="hidden" name="page" value="page-start">
+                            <input type="hidden" name="command" value="reset-password">
+                            <label class="form-label" for="reset-password-code">Reset Code</label>
+                            <input id="reset-password-code" name="reset-code" type="text" class="form-control" required>
+                            <label class="form-label" for="reset-password-password">New Password</label>
+                            <input id="reset-password-password" name="password" type="password" class="form-control" pattern="^[A-Z].{5,20}$" required>
+                            <p class="text-end">Password must start with an <u>uppercase</u> letter</p>
                         </div>
                         <div class="modal-footer">
                             <input type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" value="Cancel">
@@ -182,66 +198,78 @@ if (!isset($_SERVER['HTTPS'])) {
                     data: formData,
                     success: function(response) {
                         console.log(response);
+                        if (response.success) {
+                            switch (formId) {
+                                case 'form-login':
+                                    $('#modal-login').modal('hide');
+                                    $.get('main_page_home_60754.php', function(homeContent) {
+                                        $('#div-center-content').html(homeContent);
+                                    });
 
-                        switch (formId) {
-                            case 'form-login':
-                                $('#modal-login').modal('hide');
-                                $.get('main_page_home_60754.php', function(homeContent) {
-                                    $('#div-center-content').html(homeContent);
-                                });
+                                    $.get('left_content.php', function(leftContent) {
+                                        $('#div-left-content').html(leftContent);
+                                    });
 
-                                $.get('left_content.php', function(leftContent) {
-                                    $('#div-left-content').html(leftContent);
-                                });
+                                    $.get('left_content_sm.php', function(leftContentSm) {
+                                        $('#div-left-content-sm').html(leftContentSm);
+                                    });
 
-                                $.get('left_content_sm.php', function(leftContentSm) {
-                                    $('#div-left-content-sm').html(leftContentSm);
-                                });
+                                    $.get('right_content.php', function(rightContent) {
+                                        $('#div-right-content').html(rightContent);
+                                    });
+                                    break;
+                                case 'form-signup':
+                                    $('#modal-signup').modal('hide');
+                                    break;
+                                
+                                case 'form-signout': 
+                                    window.location.href = 'start_page_60754.php';
+                                    break;
 
-                                $.get('right_content.php', function(rightContent) {
-                                    $('#div-right-content').html(rightContent);
-                                });
-                                break;
-                            case 'form-signup':
-                                $('#modal-signup').modal('hide');
-                                alert(response.message);
-                                break;
+                                case 'form-forgot-password':
+                                    $('#modal-forgot-password').modal('hide');
+                                    $('#modal-reset-password').modal('show');
+                                    alert(response.message + ' ' + response.data);
+                                    break;
 
-                            case 'form-forgot-password':
+                                case 'form-reset-password':
+                                    $('#modal-reset-password').modal('hide');
+                                    alert(response.message);
+                                    break;
 
-                                break;
-
-                            case 'form-submit-quiz':
-                                $('#right-content-answered').text('Answered: 0/10');
-                                $('#quiz-score').val(response.data.score);
-                                $('#quiz-percent').val(response.data.percent);
-                                $('#quiz-score').text('Score: ' + response.data.score + '/10');
-                                $('#quiz-percent').text('Percent: ' + response.data.percent + '%');
-                                if (secondsDisplay < 10) {
-                                    $('#quiz-time-final').text('Time: ' + minutes + ':' + '0' + secondsDisplay);
-                                    $('#quiz-time-final').val(minutes + ':' + '0' + secondsDisplay);
-                                } else {
-                                    $('#quiz-time-final').text('Time: ' + minutes + ':' + secondsDisplay);
-                                    $('#quiz-time-final').val(minutes + ':' + secondsDisplay);
-                                }
-                                $('#button-submit-quiz').prop('disabled', true);
-                                $('#button-save-quiz').prop('disabled', true);
-                                var radioButtons = $('.form-check input[type="radio"]');
-                                $(radioButtons).each(function() {
-                                    if ($(this).attr('value') == '1') {
-                                        $(this).parent().css('background-color', 'lightgreen');
-                                    } else if($(this).attr('value') == '0' && $(this).is(':checked')) {
-                                        $(this).parent().css('background-color', 'rgb(255, 72, 72)');
+                                case 'form-submit-quiz':
+                                    $('#right-content-answered').text('Answered: 0/10');
+                                    $('#quiz-score').val(response.data.score);
+                                    $('#quiz-percent').val(response.data.percent);
+                                    $('#quiz-score').text('Score: ' + response.data.score + '/10');
+                                    $('#quiz-percent').text('Percent: ' + response.data.percent + '%');
+                                    if (secondsDisplay < 10) {
+                                        $('#quiz-time-final').text('Time: ' + minutes + ':' + '0' + secondsDisplay);
+                                        $('#quiz-time-final').val(minutes + ':' + '0' + secondsDisplay);
+                                    } else {
+                                        $('#quiz-time-final').text('Time: ' + minutes + ':' + secondsDisplay);
+                                        $('#quiz-time-final').val(minutes + ':' + secondsDisplay);
                                     }
-                                })
-                                break;
+                                    $('#button-submit-quiz').prop('disabled', true);
+                                    $('#button-save-quiz').prop('disabled', true);
 
-                            case 'form-quiz-results':
+                                    //Sets color for answers and disables
+                                    var radioButtons = $('.form-check input[type="radio"]');
+                                    setAnswerColors(radioButtons);
+                                    disableRadioButtons(radioButtons);
+                                    break;
 
+                                case 'form-quiz-results':
+
+                            }
+                        } else {
+                            alert(response.message);
                         }
+
                     },
                     error: function(xhr, status, error) {
                         console.error(error);
+
                     }
                 });
             });
@@ -275,6 +303,7 @@ if (!isset($_SERVER['HTTPS'])) {
                         break;
 
                     case 'nav-button-logout':
+                        break;
 
 
                 }
@@ -343,9 +372,6 @@ if (!isset($_SERVER['HTTPS'])) {
 
         });
 
-
-
-
         $('#button-login').click(function() {
             $('#modal-login').modal('show');
         });
@@ -357,24 +383,6 @@ if (!isset($_SERVER['HTTPS'])) {
         $('#button-forgot-password').click(function() {
             $('#modal-forgot-password').modal('show');
         });
-
-
-
-        function loadPage(page, data, callback) {
-            $.ajax({
-                type: POST,
-                url: 'controller_60754.php',
-                data: data,
-                success: function(response) {
-                    console.log(response);
-                    var pageHTML = $.get(page);
-
-                },
-                error: function(xhr, status, error) {
-                    console.error(error);
-                }
-            });
-        }
 
         //Quiz Timer
         let timer;
@@ -405,6 +413,44 @@ if (!isset($_SERVER['HTTPS'])) {
             seconds = 0;
             $('#right-content-timer').text('Time: ' + '0:00');
         }
+
+        function setAnswerColors(radioButtons) {
+            $(radioButtons).each(function() {
+                if ($(this).attr('value') == '1') {
+                    $(this).parent().css('background-color', 'lightgreen');
+                } else if ($(this).attr('value') == '0' && $(this).is(':checked')) {
+                    $(this).parent().css('background-color', 'rgb(255, 72, 72)');
+                }
+            })
+        }
+
+        function disableRadioButtons(radioButtons) {
+            $(radioButtons).each(function() {
+                $(this).prop('disabled', true);
+            })
+        }
+
+        // $.get('controller_60754.php', function(response) {
+        //     if (response.status === "logged_in") {
+        //         $.get('main_page_home_60754.php', function(homeContent) {
+        //             $('#div-center-content').html(homeContent);
+        //         });
+
+        //         $.get('left_content.php', function(leftContent) {
+        //             $('#div-left-content').html(leftContent);
+        //         });
+
+        //         $.get('left_content_sm.php', function(leftContentSm) {
+        //             $('#div-left-content-sm').html(leftContentSm);
+        //         });
+
+        //         $.get('right_content.php', function(rightContent) {
+        //             $('#div-right-content').html(rightContent);
+        //         });
+        //     } else {
+        //         window.location.href = 'start_page_60754.php';
+        //     }
+        // }, 'json');
     </script>
 </body>
 

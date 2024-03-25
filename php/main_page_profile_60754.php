@@ -1,5 +1,14 @@
             <div class="profile-content">
-                <h2 id="profle-username" class="text-center p-5">Username</h2>
+                <h2 id="profle-username" class="text-center p-5">
+                    <?php
+                    session_start();
+                    if (isset($_SESSION['username'])) {
+                        echo ($_SESSION['username']);
+                    } else {
+                        echo "Guest";
+                    }
+                    ?>
+                </h2>
                 <ul class="list-group list-group-flush rounded-0">
                     <li class="list-group-item" style="padding-bottom: 10px;">
                         <p class="d-inline float-start">Email:</p>

@@ -12,6 +12,8 @@ function isValidLogin($username, $password)
         return true;
     else
         return false;
+
+    //mysqli_close($conn);
 }
 
 function createNewUser($username, $password, $email)
@@ -21,6 +23,7 @@ function createNewUser($username, $password, $email)
     $result = mysqli_query($conn, $sql);
     
     return $result;
+    mysqli_close($conn);
 }
 
 function isValidUsername($username)
@@ -33,6 +36,36 @@ function isValidUsername($username)
         return true;
     else
         return false;
+
+    mysqli_close($conn);
+}
+
+function forgotPassword($resetCode, $email)
+{
+    global $conn;
+    $sql = "UPDATE users SET reset_code = $resetCode WHERE '$email' = email";
+    mysqli_query($conn, $sql);
+
+    if(mysqli_affected_rows($conn) > 0)
+        return true;
+    else
+        return false;
+
+    mysqli_close($conn);
+}
+
+function resetPassword($resetCode, $newPassword)
+{
+    global $conn;
+    $sql = "UPDATE users SET password = '$newPassword', reset_code = NULL WHERE reset_code = $resetCode";
+    mysqli_query($conn, $sql);
+
+    if(mysqli_affected_rows($conn) > 0)
+        return true;
+    else
+        return false;
+
+    mysqli_close($conn);
 }
 
 function getQuizData()
