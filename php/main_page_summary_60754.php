@@ -48,15 +48,15 @@
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item ">
                         <p class="d-inline float-start mb-0">Average Score:</p>
-                        <p class="d-inline float-end mb-0">0</p>
+                        <p id="summary-average-score"class="d-inline float-end mb-0">0</p>
                     </li>
                     <li class="list-group-item">
                         <p class="d-inline float-start mb-0">Average Percentage:</p>
-                        <p class="d-inline float-end mb-0">0</p>
+                        <p id="summary-average-percent" class="d-inline float-end mb-0">0</p>
                     </li>
                     <li class="list-group-item">
                         <p class="d-inline float-start mb-0">Average Time:</p>
-                        <p class="d-inline float-end mb-0">0</p>
+                        <p id="summary-average-time" class="d-inline float-end mb-0">0</p>
                     </li>
                 </ul>
             </div>

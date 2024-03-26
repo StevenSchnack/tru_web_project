@@ -8,12 +8,14 @@ if (!isset($_SERVER['HTTPS'])) {
 ?>
 <!doctype html>
 <html>
+
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
+
 <body>
     <!--Header-->
     <div id="div-home-header" class="container-fluid p-5 text-bg-dark rounded-0 rounded-bottom">
@@ -160,9 +162,9 @@ if (!isset($_SERVER['HTTPS'])) {
                         <form id="form-quiz-results" method="post" action="controller_60754.php">
                             <input type="hidden" name="page" value="page-main">
                             <input type="hidden" name="command" value="submit-quiz">
-                            <p id="quiz-score" name="score" value="">Score: 0</p>
-                            <p id="quiz-percent" name="percent" value="">Percent: 0%</p>
-                            <p id="quiz-time-final" name="time" value="">Time: 0:00</p>
+                            <p id="quiz-score">Score: 0</p>
+                            <p id="quiz-percent">Percent: 0%</p>
+                            <p id="quiz-time-final">Time: 0:00</p>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -221,8 +223,8 @@ if (!isset($_SERVER['HTTPS'])) {
                                 case 'form-signup':
                                     $('#modal-signup').modal('hide');
                                     break;
-                                
-                                case 'form-signout': 
+
+                                case 'form-signout':
                                     window.location.href = 'start_page_60754.php';
                                     break;
 
@@ -238,18 +240,19 @@ if (!isset($_SERVER['HTTPS'])) {
                                     break;
 
                                 case 'form-submit-quiz':
+                                    
                                     $('#right-content-answered').text('Answered: 0/10');
                                     $('#quiz-score').val(response.data.score);
                                     $('#quiz-percent').val(response.data.percent);
                                     $('#quiz-score').text('Score: ' + response.data.score + '/10');
                                     $('#quiz-percent').text('Percent: ' + response.data.percent + '%');
+
                                     if (secondsDisplay < 10) {
                                         $('#quiz-time-final').text('Time: ' + minutes + ':' + '0' + secondsDisplay);
-                                        $('#quiz-time-final').val(minutes + ':' + '0' + secondsDisplay);
                                     } else {
                                         $('#quiz-time-final').text('Time: ' + minutes + ':' + secondsDisplay);
-                                        $('#quiz-time-final').val(minutes + ':' + secondsDisplay);
                                     }
+
                                     $('#button-submit-quiz').prop('disabled', true);
                                     $('#button-save-quiz').prop('disabled', true);
 
@@ -265,7 +268,6 @@ if (!isset($_SERVER['HTTPS'])) {
                         } else {
                             alert(response.message);
                         }
-
                     },
                     error: function(xhr, status, error) {
                         console.error(error);
@@ -281,7 +283,6 @@ if (!isset($_SERVER['HTTPS'])) {
                         $.get('main_page_home_60754.php', function(homeContent) {
                             $('#div-center-content').html(homeContent);
                         });
-
                         break;
 
                     case 'nav-button-profile':
@@ -294,6 +295,17 @@ if (!isset($_SERVER['HTTPS'])) {
                         $.get('main_page_summary_60754.php', function(summaryContent) {
                             $('#div-center-content').html(summaryContent);
                         });
+
+                        $.post('controller_60754.php', {
+                            page: 'page-main',
+                            command: 'summary-data'
+                        }, function(summaryData) {
+                            console.log(summaryData);
+                            let avgTime = convertSecondsToString(summaryData.averageTime);
+                            $('#summary-average-time').text(avgTime);
+                            $('#summary-average-score').text(summaryData.averageScore);
+                            $('#summary-average-percent').text(summaryData.averageScore * 10 + '%');
+                        }, 'json');
                         break;
 
                     case 'nav-button-leaderboard':
@@ -410,6 +422,7 @@ if (!isset($_SERVER['HTTPS'])) {
 
         function resetTimer() {
             clearInterval(timer);
+            $('#send-result-time').val(seconds);
             seconds = 0;
             $('#right-content-timer').text('Time: ' + '0:00');
         }
@@ -428,6 +441,17 @@ if (!isset($_SERVER['HTTPS'])) {
             $(radioButtons).each(function() {
                 $(this).prop('disabled', true);
             })
+        }
+
+        function convertSecondsToString(secs) {
+            let avgMinutes = Math.floor(secs / 60);
+            let avgSeconds = Math.floor(secs % 60);
+            let string;
+            if (avgSeconds < 10)
+                string = avgMinutes + ':0' + avgSeconds;
+            else
+                string = avgMinutes + ':' + avgSeconds;
+            return string;
         }
 
         // $.get('controller_60754.php', function(response) {

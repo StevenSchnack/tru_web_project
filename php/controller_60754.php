@@ -90,6 +90,7 @@ else if ($_POST['page'] == 'page-main') {
     }
 
     $username = $_SESSION['username'];
+    
 
     switch ($_POST['command']) {
         case 'signout':
@@ -108,18 +109,27 @@ else if ($_POST['page'] == 'page-main') {
 
         case 'submit-quiz':
             $correct = 0;
+            $time = $_POST['time'];
+            $quizId = checkQuizDate();
             for ($i = 1; $i <= 10; $i++) {
-                $thing = 'quiz-question-' . $i;
-                if (isset($_POST[$thing])) {
-                    $answer = $_POST[$thing];
+                $questionAnswer = 'quiz-question-' . $i;
+                if (isset($_POST[$questionAnswer])) {
+                    $answer = $_POST[$questionAnswer];
                     if ($answer == 1) {
                         $correct++;
                     }
                 }
             }
             $percent = ($correct / 10) * 100;
+            saveUserQuizResults($quizId, $username, $correct, $time);
             header('Content-Type: application/json');
             echo json_encode(['success' => true, 'message' => 'Results are in', 'data' => ['score' => $correct, 'percent' => $percent]]);
+            exit();
+        
+        case 'summary-data': 
+            $summaryData = getUserSummary($username);
+            header('Content-Type: application/json');
+            echo json_encode($summaryData);
             exit();
     }
 }
