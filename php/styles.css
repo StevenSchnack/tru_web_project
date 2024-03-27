@@ -33,6 +33,7 @@
     color: rgb(255, 82, 82);
     font-size: smaller;
 }
+
 /*Home Page Styles*/
 
 /*Quiz Page Styles*/
@@ -89,7 +90,10 @@
     padding-right: 50px;
 }
 
-
+#form-change-profile .text-end{
+    color: rgb(255, 82, 82);
+    font-size: smaller;
+}
 /*Summary Page Styles*/
 .summary-content {
     width: 100%;

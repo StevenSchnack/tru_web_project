@@ -1,6 +1,6 @@
 <!--Center Content-->
 <div id="leaderboard-content">
-    <div class="card">
+    <!-- <div class="card">
         <div class="card-header text-bg-primary">
             <h3 class="text-center">Quiz #1</h3>
         </div>
@@ -78,5 +78,5 @@
                 </tbody>
             </table>
         </div>
-    </div>
+    </div> -->
 </div>

@@ -49,6 +49,11 @@ function isValidUsername($username)
     
 }
 
+function deleteUser($username, $password)
+{
+    
+}
+
 function forgotPassword($resetCode, $email)
 {
     global $conn;
@@ -100,7 +105,7 @@ function saveUserQuizResults($quizId, $username, $score, $time)
         }
         $userTimeExistSql = "SELECT user_id FROM user_times WHERE user_id = $userId";
         if(mysqli_query($conn, $userTimeExistSql)){
-            $userTimeSql = "UPDATE user_times SET quiz_$quizId = '$time' WHERE user_id = $userId"; //Something is causing problems here
+            $userTimeSql = "UPDATE user_times SET quiz_$quizId = '$time' WHERE user_id = $userId";
             if(!mysqli_query($conn, $userTimeSql))
                     echo "Could not update user times";
         }
@@ -133,7 +138,6 @@ function getUserSummary($username)
     if(mysqli_num_rows($timeResult) == 0){
         return null;
     }
-   
 
     $scores = mysqli_fetch_assoc($scoreResult);
     $times = mysqli_fetch_assoc($timeResult);
@@ -167,17 +171,54 @@ function getUserSummary($username)
 
 function getUserProfile($username)
 {
+    global $conn;
+    $sql = "SELECT email, reminder FROM users WHERE username = '$username'";
+    $result = mysqli_query($conn, $sql);
 
+    if(mysqli_num_rows($result) > 0)
+    {
+        return mysqli_fetch_assoc($result);
+    }
+}
+
+function toggleReminder($username, $reminder)
+{
+    global $conn;
+    $sql = "UPDATE users SET reminder = $reminder WHERE username = '$username'";
+    if(mysqli_query($conn, $sql))
+        return true;
+    else
+        return false;
 }
 
 function changePassword($username, $newPassword)
 {
-
+    global $conn;
+    $sql = "UPDATE users SET password = '$newPassword' WHERE username = '$username'";
+    if(mysqli_query($conn, $sql))
+    {
+        return true;
+    }
+    else
+    {
+        echo 'Could not change password';
+        return false;
+    }
 }
 
-function changeEmail($username, $email)
+function changeEmail($username, $newEmail)
 {
-
+    global $conn;
+    $sql = "UPDATE users SET email = '$newEmail' WHERE username = '$username'";
+    if(mysqli_query($conn, $sql))
+    {
+        return true;
+    }
+    else
+    {
+        echo 'Could not change email';
+        return false;
+    }
 }
 
 function checkQuizDate()
@@ -280,4 +321,102 @@ function buildQuiz($quizData)
         $questionCount++;
     }
     return $quizHTML;
+}
+
+function getLeaderboardData()
+{
+    $userScores = [];
+    $userTimes = [];
+    $quizId = checkQuizDate();
+    global $conn;
+    $usersScoreSql = "SELECT user_id, quiz_$quizId FROM user_scores ORDER BY quiz_$quizId DESC";
+    $usersScoreResult = mysqli_query($conn, $usersScoreSql);
+    while($row = mysqli_fetch_assoc($usersScoreResult)){
+        $userScores[] = $row;
+    }
+
+    $usersTimeSql = "SELECT user_id, quiz_$quizId FROM user_times ORDER BY quiz_$quizId DESC";
+    $usersTimeResult = mysqli_query($conn, $usersTimeSql);
+    while($row = mysqli_fetch_assoc($usersTimeResult)){
+        $userTimes[] = $row;
+    }
+
+    //Converting user_id to username and quiz_# to score/time
+    $newUserScores = [];
+    $newUserTimes = [];
+    foreach($userScores as $userScore){
+        $userId = $userScore['user_id'];
+        $score = $userScore['quiz_' . $quizId];
+        $sql = "SELECT username FROM users WHERE user_id = $userId";
+        $result = mysqli_query($conn, $sql);
+        if($row = mysqli_fetch_assoc($result)){
+            $username = $row['username'];
+            $newUserScores[] = ['username' => $username, 'score' => $score];
+        }
+    }
+    foreach($userTimes as $userTime){
+        $userId = $userTime['user_id'];
+        $time = $userTime['quiz_' . $quizId];
+        $sql = "SELECT username FROM users WHERE user_id = $userId";
+        $result = mysqli_query($conn, $sql);
+        if($row = mysqli_fetch_assoc($result)){
+            $username = $row['username'];
+            $newUserTimes[] = ['username' => $username, 'time' => $time];
+        }
+    }
+
+    $leaderboardData = [
+        'scores' => $newUserScores,
+        'times' => $newUserTimes,
+    ];
+
+    return $leaderboardData;
+}
+
+function buildLeaderboard($leaderboardData)
+{
+    $lbHTML = '';
+    $lbCount = 1;
+    
+    //Card
+    $lbHTML .= '<div class="card">';
+    //Header
+    $lbHTML .= '<div class="card-header text-bg-primary">';
+    $lbHTML .= '<h3 class="text-center"> Quiz #' . checkQuizDate() . '</h3>';
+    $lbHTML .= '</div>';
+    //Body
+    $lbHTML .= '<div class="card-body">';
+    //Table
+    $lbHTML .= '<table class="table table-striped">';
+    $lbHTML .= '<thead>';
+    $lbHTML .= '<tr>';
+    $lbHTML .= '<th scope="col">#</th>';
+    $lbHTML .= '<th scope="col">Username</th>';
+    $lbHTML .= '<th scope="col">Score</th>';
+    $lbHTML .= '<th scope="col">Time</th>';
+    $lbHTML .= '</tr>';
+    $lbHTML .= '</thead>';
+    $lbHTML .= '<tbody class="leaderboard-placement">';
+    foreach ($leaderboardData['scores'] as $userScores) {
+        $userName = $userScores['username'];
+        $userScore = $userScores['score'];
+        $userTime = null;
+        //Get user times
+        foreach($leaderboardData['times'] as $userTimes){
+            if($userTimes['username'] == $userName){
+                $userTime = $userTimes['time'];
+                break;
+            }
+        }
+        $lbHTML .= '<tr>';
+        $lbHTML .= '<th scope="row">' . $lbCount . '</th>';
+        $lbHTML .= '<td>' . $userName . '</td>';
+        $lbHTML .= '<td>' . $userScore . '</td>';
+        $lbHTML .= '<td>' . $userTime . '</td>';
+        $lbHTML .= '</tr>';
+        $lbCount++;
+    }
+    $lbHTML .= '</tbody></table></div></div>';                    
+
+    return $lbHTML;
 }

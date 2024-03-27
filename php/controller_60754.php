@@ -24,7 +24,7 @@ if ($_POST['page'] == 'page-start') {
             $password = hash('sha256', $_POST['password']);
 
             if (isValidLogin($username, $password)) {
-                
+
                 $_SESSION['signedin'] = 'YES';
                 $_SESSION['username'] = $username;
                 header('Content-Type: application/json');
@@ -90,7 +90,7 @@ else if ($_POST['page'] == 'page-main') {
     }
 
     $username = $_SESSION['username'];
-    
+
 
     switch ($_POST['command']) {
         case 'signout':
@@ -125,11 +125,60 @@ else if ($_POST['page'] == 'page-main') {
             header('Content-Type: application/json');
             echo json_encode(['success' => true, 'message' => 'Results are in', 'data' => ['score' => $correct, 'percent' => $percent]]);
             exit();
-        
-        case 'summary-data': 
+
+        case 'leaderboard-data':
+            $leaderboardData = getLeaderboardData();
+            $lbHTML = buildLeaderboard($leaderboardData);
+            header('Content-Type: application/json');
+            echo json_encode(['data' => $lbHTML]);
+            exit();
+
+        case 'summary-data':
             $summaryData = getUserSummary($username);
             header('Content-Type: application/json');
             echo json_encode($summaryData);
             exit();
+
+        case 'profile-data':
+            $profileData = getUserProfile($username);
+            header('Content-Type: application/json');
+            echo json_encode($profileData);
+            exit();
+
+        case 'change-profile':
+            $response = [];
+
+            // Change password
+            if (!empty($_POST['new-password'])) {
+                $newPassword = hash('sha256', $_POST['new-password']);
+                if (changePassword($username, $newPassword)) {
+                    $response['passwordChange'] = ['success' => true, 'message' => 'Password change successful'];
+                } else {
+                    $response['passwordChange'] = ['success' => false, 'message' => 'Password change has failed'];
+                }
+            }
+            // Change email
+            if (!empty($_POST['new-email'])) {
+                $newEmail = $_POST['new-email'];
+                if (changeEmail($username, $newEmail)) {
+                    $response['emailChange'] = ['success' => true, 'message' => 'Email change successful'];
+                } else {
+                    $response['emailChange'] = ['success' => false, 'message' => 'Email change has failed'];
+                }
+            }
+            //Set reminder
+            $reminder = 0;
+            if(isset($_POST['set-reminder']))
+                $reminder = 1;
+            
+            if(toggleReminder($username, $reminder)){
+                $response['setReminder'] = ['success' => true, 'message' => 'Reminder change successful'];
+            }
+            else{
+                $response['setReminder'] = ['success' => false, 'message' => 'Reminder change has failed'];
+
+            }
+            header('Content-Type: application/json');
+            echo json_encode($response);         
     }
 }
