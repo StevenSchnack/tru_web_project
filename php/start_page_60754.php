@@ -90,7 +90,7 @@ if (!isset($_SERVER['HTTPS'])) {
                             <label class="form-label" for="signup-email">Email</label>
                             <input id="signup-email" name="email" type="email" class="form-control" required>
                             <label class="form-label" for="signup-password">Password</label>
-                            <input id="signup-password" name="password" type="password" class="form-control" pattern="^[A-Z].{4,20}$" placeholder="Enter Password" required>
+                            <input id="signup-password" name="password" type="password" class="form-control" pattern="^[A-Z].{4,19}$" placeholder="Enter Password" required>
                             <p class="text-end">Password must start with an <u>uppercase</u> letter</p>
                             <p class="text-end">Password must be <u>5-20</u> characters long</p>
                         </div>
@@ -140,7 +140,7 @@ if (!isset($_SERVER['HTTPS'])) {
                             <label class="form-label" for="reset-password-code">Reset Code</label>
                             <input id="reset-password-code" name="reset-code" type="text" class="form-control" required>
                             <label class="form-label" for="reset-password-password">New Password</label>
-                            <input id="reset-password-password" name="password" type="password" class="form-control" pattern="^[A-Z].{4,20}$" required>
+                            <input id="reset-password-password" name="password" type="password" class="form-control" pattern="^[A-Z].{4,19}$" required>
                             <p class="text-end">Password must start with an <u>uppercase</u> letter</p>
                             <p class="text-end">Password must be <u>5-20</u> characters long</p>
                         </div>
@@ -173,6 +173,30 @@ if (!isset($_SERVER['HTTPS'])) {
                         <input type="button" class="btn btn-warning" value="Share">
                         <input type="button" class="btn btn-primary" data-bs-dismiss="modal" value="Continue">
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete User Modal-->
+        <div id="modal-delete-user" class="modal fade pt-5">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header text-bg-danger justify-content-center">
+                        <h1 class="modal-title">Account Deletion</h1>
+                    </div>
+                    <form id="form-delete-user" method="post" action="controller_60754.php">
+                        <div class="modal-body text-center">
+                            <input type="hidden" name="page" value="page-main">
+                            <input type="hidden" name="command" value="delete-user">
+                            <h3>Password required to delete account</h3><br>
+                            <label class="form-label" for="delete-user-password">Enter Password</label>
+                            <input id="delete-user-password" type="password" name="password" class="form-control" required>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="button" class="btn btn-outline-primary" data-bs-dismiss="modal" value="Cancel">
+                            <input id="form-button-delete-user" type="submit" class="btn btn-danger" value="Delete User">
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -223,11 +247,13 @@ if (!isset($_SERVER['HTTPS'])) {
                                     });
                                     break;
                                 case 'form-signup':
+                                    alert(response.message);
                                     $('#modal-signup').modal('hide');
                                     break;
 
                                 case 'form-signout':
-                                    window.location.href = 'start_page_60754.php';
+                                    alert(response.message);
+                                    window.location.href = 'controller_60754.php';
                                     break;
 
                                 case 'form-forgot-password':
@@ -237,8 +263,8 @@ if (!isset($_SERVER['HTTPS'])) {
                                     break;
 
                                 case 'form-reset-password':
-                                    $('#modal-reset-password').modal('hide');
                                     alert(response.message);
+                                    $('#modal-reset-password').modal('hide');
                                     break;
 
                                 case 'form-submit-quiz':
@@ -263,6 +289,15 @@ if (!isset($_SERVER['HTTPS'])) {
                                     setAnswerColors(radioButtons);
                                     disableRadioButtons(radioButtons);
                                     break;
+
+                                case 'form-delete-user':
+                                    <?php
+                                    session_unset();
+                                    session_destroy();
+                                    ?>
+                                    window.location.href = 'controller_60754.php';
+                                    break;
+
 
                                 case 'form-change-profile':
 
@@ -360,6 +395,12 @@ if (!isset($_SERVER['HTTPS'])) {
                 }
             });
 
+            //Delete User
+            $(document).on('click', '#button-delete-user', function(e) {
+                e.preventDefault();
+                $('#modal-delete-user').modal('show');
+            });
+
             //Start Quiz
             $(document).on('click', '#button-start-quiz', function() {
                 $.ajax({
@@ -402,8 +443,27 @@ if (!isset($_SERVER['HTTPS'])) {
                 console.log(answered);
                 $('#right-content-answered').text('Answered: ' + answered + '/10');
             })
-
         });
+        //Check if user has completed the quiz
+        $(document).ready(function() {
+                $.ajax({
+                    url: 'controller_60754.php',
+                    type: 'POST',
+                    data: {
+                        name: 'page-main',
+                        command: 'lock-quiz'
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        if (response.success == true) {
+                            $('.form-check input[type="radio"]').prop('disabled', true);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error occurred: " + error);
+                    }
+                });
+            });
 
         $('#button-login').click(function() {
             $('#modal-login').modal('show');

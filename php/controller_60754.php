@@ -97,7 +97,7 @@ else if ($_POST['page'] == 'page-main') {
             session_unset();
             session_destroy();
             header('Content-Type: application/json');
-            echo json_encode(['success' => true, 'message' => 'User was signed out']);
+            echo json_encode(['success' => true, 'message' => 'You were signed out successfully!']);
             exit();
 
         case 'start-quiz':
@@ -168,17 +168,41 @@ else if ($_POST['page'] == 'page-main') {
             }
             //Set reminder
             $reminder = 0;
-            if(isset($_POST['set-reminder']))
+            if (isset($_POST['set-reminder']))
                 $reminder = 1;
-            
-            if(toggleReminder($username, $reminder)){
-                $response['setReminder'] = ['success' => true, 'message' => 'Reminder change successful'];
-            }
-            else{
-                $response['setReminder'] = ['success' => false, 'message' => 'Reminder change has failed'];
 
+            if (toggleReminder($username, $reminder)) {
+                $response['setReminder'] = ['success' => true, 'message' => 'Reminder change successful'];
+            } else {
+                $response['setReminder'] = ['success' => false, 'message' => 'Reminder change has failed'];
             }
             header('Content-Type: application/json');
-            echo json_encode($response);         
+            echo json_encode($response);
+            exit();
+
+        case 'delete-user':
+            $password = hash('sha256', $_POST['password']);
+            if (deleteUser($username, $password)) {
+                header('Content-Type: application/json');
+                echo json_encode(['success' => true, 'message' => 'Account succesfully deleted']);
+            } else 
+            {
+                header('Content-Type: application/json');
+                echo json_encode(['success' => false, 'message' => 'User could not be deleted']);
+            }
+            exit();
+        
+        case 'lock-quiz':
+            //If user completed the quiz
+            if(checkQuizCompletion($username)){
+                header('Content-Type: application/json');
+                echo json_encode(['success' => true]);
+            } else {
+                header('Content-Type: application/json');
+                echo json_encode(['success' => false]);
+            }
+            exit();
+            
+            
     }
 }

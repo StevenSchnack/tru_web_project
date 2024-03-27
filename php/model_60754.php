@@ -58,12 +58,12 @@ function deleteUser($username, $password)
     {
         $row = mysqli_fetch_assoc($result);
         $userId = $row['user_id'];        
-        $scoresSql = "DELETE FROM users WHERE user_id = $userId";
+        $scoresSql = "DELETE FROM user_scores WHERE user_id = $userId";
         if(!mysqli_query($conn, $scoresSql)){
             echo 'Could not delete user scores';
             return false;
         }
-        $timesSql = "DELETE FROM users WHERE user_id = $userId";
+        $timesSql = "DELETE FROM user_times WHERE user_id = $userId";
         if(!mysqli_query($conn, $timesSql)){
             echo 'Could not delete user times';
             return false;
@@ -80,7 +80,7 @@ function deleteUser($username, $password)
     }
     else
     {
-        echo 'User not found';
+        echo 'User not found or password was incorrect';
         return false;
     }
 
@@ -127,7 +127,7 @@ function saveUserQuizResults($quizId, $username, $score, $time)
         $userScoreExistSql = "SELECT user_id FROM user_scores WHERE user_id = $userId";
         if(mysqli_query($conn, $userScoreExistSql))
         {
-            $userScoreSql = "UPDATE user_scores SET quiz_$quizId = $score WHERE user_id = $userId";
+            $userScoreSql = "UPDATE user_scores SET quiz_" . $quizId . " = $score WHERE user_id = $userId";
             if(!mysqli_query($conn, $userScoreSql))
                 echo "Could not update user scores";
         }
@@ -137,7 +137,7 @@ function saveUserQuizResults($quizId, $username, $score, $time)
         }
         $userTimeExistSql = "SELECT user_id FROM user_times WHERE user_id = $userId";
         if(mysqli_query($conn, $userTimeExistSql)){
-            $userTimeSql = "UPDATE user_times SET quiz_$quizId = '$time' WHERE user_id = $userId";
+            $userTimeSql = "UPDATE user_times SET quiz_" . $quizId . " = '$time' WHERE user_id = $userId";
             if(!mysqli_query($conn, $userTimeSql))
                     echo "Could not update user times";
         }
@@ -361,13 +361,13 @@ function getLeaderboardData()
     $userTimes = [];
     $quizId = checkQuizDate();
     global $conn;
-    $usersScoreSql = "SELECT user_id, quiz_$quizId FROM user_scores ORDER BY quiz_$quizId DESC";
+    $usersScoreSql = "SELECT user_id, quiz_" . $quizId . " FROM user_scores WHERE quiz_" . $quizId . " IS NOT NULL ORDER BY quiz_" . $quizId . " DESC";
     $usersScoreResult = mysqli_query($conn, $usersScoreSql);
     while($row = mysqli_fetch_assoc($usersScoreResult)){
         $userScores[] = $row;
     }
 
-    $usersTimeSql = "SELECT user_id, quiz_$quizId FROM user_times ORDER BY quiz_$quizId DESC";
+    $usersTimeSql = "SELECT user_id, quiz_" . $quizId . " FROM user_times WHERE quiz_" . $quizId . " IS NOT NULL ORDER BY quiz_" . $quizId . " DESC";
     $usersTimeResult = mysqli_query($conn, $usersTimeSql);
     while($row = mysqli_fetch_assoc($usersTimeResult)){
         $userTimes[] = $row;
@@ -462,4 +462,25 @@ function convertSecondsToString($seconds)
     else
         $string = $minutes . ':' . $seconds;
     return $string;
+}
+
+function checkQuizCompletion($username)
+{
+    global $conn;
+    $quizId = checkQuizDate();
+    $userIdSql = "SELECT user_id FROM users WHERE username = '$username'";
+    $result = mysqli_query($conn, $userIdSql);
+    if($row = mysqli_fetch_assoc($result)){
+        $userId = $row['user_id'];
+        $checkQuizSql = "SELECT quiz_" . $quizId . " FROM user_scores WHERE user_id = $userId AND quiz_" . $quizId . " IS NOT NULL";
+        $result = mysqli_query($conn, $checkQuizSql);
+        if($row = mysqli_num_rows($result) > 0){
+            echo 'User has completed quiz';
+            return true;
+        } else {
+            echo 'User has not completed quiz';
+            return false;
+        }
+    }
+    echo 'User not found';
 }
