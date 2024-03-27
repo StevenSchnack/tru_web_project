@@ -23,7 +23,7 @@
                         </li>
                         <li class="list-group-item pt-4">
                             <label class="d-inline float-start">Change Password</label>
-                            <input class="d-inline float-end" name="new-password" type="password" placeholder="Enter New Password" pattern="^[A-Z].{5,20}$"/>
+                            <input class="d-inline float-end" name="new-password" type="password" placeholder="Enter New Password" pattern="^[A-Z].{4,20}$"/>
                             <br><br>
                             <p class="text-end">Password must start with an <u>uppercase</u> letter</p>
                             <p class="text-end">Password must be <u>5-20</u> characters long</p>

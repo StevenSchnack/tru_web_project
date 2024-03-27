@@ -51,7 +51,39 @@ function isValidUsername($username)
 
 function deleteUser($username, $password)
 {
-    
+    global $conn;
+    $userIdSql = "SELECT user_id FROM users WHERE username = '$username' AND password = '$password'";
+    $result = mysqli_query($conn, $userIdSql);
+    if($result && mysqli_num_rows($result) > 0)
+    {
+        $row = mysqli_fetch_assoc($result);
+        $userId = $row['user_id'];        
+        $scoresSql = "DELETE FROM users WHERE user_id = $userId";
+        if(!mysqli_query($conn, $scoresSql)){
+            echo 'Could not delete user scores';
+            return false;
+        }
+        $timesSql = "DELETE FROM users WHERE user_id = $userId";
+        if(!mysqli_query($conn, $timesSql)){
+            echo 'Could not delete user times';
+            return false;
+        }
+        $usersSql = "DELETE FROM users WHERE user_id = $userId";
+        if(mysqli_query($conn, $usersSql)){
+            return true;
+        }
+        else
+        {
+            echo 'Could not delete user data';
+            return false;
+        }
+    }
+    else
+    {
+        echo 'User not found';
+        return false;
+    }
+
 }
 
 function forgotPassword($resetCode, $email)
@@ -412,11 +444,22 @@ function buildLeaderboard($leaderboardData)
         $lbHTML .= '<th scope="row">' . $lbCount . '</th>';
         $lbHTML .= '<td>' . $userName . '</td>';
         $lbHTML .= '<td>' . $userScore . '</td>';
-        $lbHTML .= '<td>' . $userTime . '</td>';
+        $lbHTML .= '<td>' . convertSecondsToString($userTime) . '</td>';
         $lbHTML .= '</tr>';
         $lbCount++;
     }
     $lbHTML .= '</tbody></table></div></div>';                    
 
     return $lbHTML;
+}
+function convertSecondsToString($seconds) 
+{
+    $minutes = floor($seconds / 60);
+    $seconds = floor($seconds % 60);
+    $string = '';
+    if ($seconds < 10)
+        $string = $minutes . ':0' . $seconds;
+    else
+        $string = $minutes . ':' . $seconds;
+    return $string;
 }

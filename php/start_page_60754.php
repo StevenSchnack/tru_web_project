@@ -90,7 +90,7 @@ if (!isset($_SERVER['HTTPS'])) {
                             <label class="form-label" for="signup-email">Email</label>
                             <input id="signup-email" name="email" type="email" class="form-control" required>
                             <label class="form-label" for="signup-password">Password</label>
-                            <input id="signup-password" name="password" type="password" class="form-control" pattern="^[A-Z].{5,20}$" placeholder="Enter Password" required>
+                            <input id="signup-password" name="password" type="password" class="form-control" pattern="^[A-Z].{4,20}$" placeholder="Enter Password" required>
                             <p class="text-end">Password must start with an <u>uppercase</u> letter</p>
                             <p class="text-end">Password must be <u>5-20</u> characters long</p>
                         </div>
@@ -140,7 +140,7 @@ if (!isset($_SERVER['HTTPS'])) {
                             <label class="form-label" for="reset-password-code">Reset Code</label>
                             <input id="reset-password-code" name="reset-code" type="text" class="form-control" required>
                             <label class="form-label" for="reset-password-password">New Password</label>
-                            <input id="reset-password-password" name="password" type="password" class="form-control" pattern="^[A-Z].{5,20}$" required>
+                            <input id="reset-password-password" name="password" type="password" class="form-control" pattern="^[A-Z].{4,20}$" required>
                             <p class="text-end">Password must start with an <u>uppercase</u> letter</p>
                             <p class="text-end">Password must be <u>5-20</u> characters long</p>
                         </div>
