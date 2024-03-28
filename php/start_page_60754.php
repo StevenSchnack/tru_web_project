@@ -268,7 +268,6 @@ if (!isset($_SERVER['HTTPS'])) {
                                     break;
 
                                 case 'form-submit-quiz':
-
                                     $('#right-content-answered').text('Answered: 0/10');
                                     $('#quiz-score').val(response.data.score);
                                     $('#quiz-percent').val(response.data.percent);
@@ -390,8 +389,30 @@ if (!isset($_SERVER['HTTPS'])) {
                         break;
 
                     case 'button-save-quiz':
+                        var quizProgress = {};
+                        $('.question').each(function() {
+                            var questionId = $(this).attr('question-value');
+                            var selectedOption = $(this).find('input[type="radio"]:checked').attr('option-value');
+                            quizProgress[questionId] = selectedOption || 'No selection';
+                        });
+                        quizProgress['time'] = seconds;
+                        $.ajax({
+                            url: 'controller_60754.php',
+                            type: 'POST',
+                            data: {
+                                page: 'page-main',
+                                command: 'save-quiz',
+                                quizProgress: JSON.stringify(quizProgress)
+                            },
+                            dataType: 'json',
+                            success: function(response) {
+                                console.log(response);
+                                alert('Quiz progress has been saved');
+                                $('#form-signout').submit();
+                            }
+                        })
 
-
+                        console.log(quizProgress);
                 }
             });
 
@@ -412,17 +433,18 @@ if (!isset($_SERVER['HTTPS'])) {
                     },
                     success: function(obj) {
                         console.log(obj);
-                        if (obj.success) {
+                        if (!obj.completed) {
                             $.get('main_page_quiz_60754.php', function(quizContent) {
                                 $('#div-center-content').html(quizContent);
                                 $('#div-content-quiz').html(obj.data);
                                 $('#button-submit-quiz').prop('disabled', false);
                                 $('#button-save-quiz').prop('disabled', false);
+                                startTimer();
                             });
-
-                            console.log(obj.data);
-                        } else {
-                            console.error('Failed to load quiz:', obj.message);
+                        } else if (obj.completed) {
+                            $.get('main_page_quiz_60754.php', function(quizContent) {
+                                $('#div-center-content').html("<h1 class='text-center p-5'>You have already completed the quiz</h1>");
+                            });
                         }
                     },
                     error: function(xhr, status, error) {
@@ -445,25 +467,28 @@ if (!isset($_SERVER['HTTPS'])) {
             })
         });
         //Check if user has completed the quiz
-        $(document).ready(function() {
-                $.ajax({
-                    url: 'controller_60754.php',
-                    type: 'POST',
-                    data: {
-                        name: 'page-main',
-                        command: 'lock-quiz'
-                    },
-                    success: function(response) {
-                        console.log(response);
-                        if (response.success == true) {
-                            $('.form-check input[type="radio"]').prop('disabled', true);
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("Error occurred: " + error);
-                    }
-                });
-            });
+
+        // $(document).ready(function() {
+        //     $.ajax({
+        //         url: 'controller_60754.php',
+        //         type: 'POST',
+        //         data: {
+        //             page: 'page-main',
+        //             command: 'lock-quiz'
+        //         },
+        //         dataType: 'json',
+        //         success: function(response) {
+        //             console.log(response);
+        //             if (response.success === true) {
+        //                 $('.form-check input[type="radio"]').prop('disabled', true);
+        //             }
+        //         },
+        //         error: function(xhr, status, error) {
+        //             console.error("Error occurred: " + error);
+        //         }
+        //     });
+        // });
+
 
         $('#button-login').click(function() {
             $('#modal-login').modal('show');

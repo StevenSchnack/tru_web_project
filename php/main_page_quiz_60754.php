@@ -3,11 +3,8 @@
     <input type="hidden" name="page" value="page-main">
     <input type="hidden" name="command" value="submit-quiz">
     <input id="send-result-time" type="hidden" name="time" value="">
-    <h2 id="quiz-title" class="text-center">Quiz #1</h2>
     <!--Question 1-->
     <div id="div-content-quiz">
-        
+
     </div>
 </form>
-
-

@@ -103,8 +103,24 @@ else if ($_POST['page'] == 'page-main') {
         case 'start-quiz':
             $quizData = getQuizData();
             $quizHTML = buildQuiz($quizData);
-            header('Content-Type: application/json');
-            echo json_encode(['success' => true, 'message' => 'Quiz was Constructed', 'data' => $quizHTML]);
+            if (checkQuizCompletion($username)) {
+                header('Content-Type: application/json');
+                echo json_encode(['success' => true, 'completed' => true]);
+            } else {
+                header('Content-Type: application/json');
+                echo json_encode(['success' => true, 'completed' => false, 'data' => $quizHTML]);
+            }
+            exit();
+
+        case 'save-quiz':
+            $quizProgress = $_POST['quizProgress'];
+            if (saveQuizProgress($username, $quizProgress)) {
+                header('Content-Type: application/json');
+                echo json_encode(['success' => true, 'message' => 'Quiz data saved to database']);
+            } else {
+                header('Content-Type: application/json');
+                echo json_encode(['success' => false, 'message' => 'Failed to save quiz data']);
+            }
             exit();
 
         case 'submit-quiz':
@@ -185,24 +201,10 @@ else if ($_POST['page'] == 'page-main') {
             if (deleteUser($username, $password)) {
                 header('Content-Type: application/json');
                 echo json_encode(['success' => true, 'message' => 'Account succesfully deleted']);
-            } else 
-            {
+            } else {
                 header('Content-Type: application/json');
                 echo json_encode(['success' => false, 'message' => 'User could not be deleted']);
             }
             exit();
-        
-        case 'lock-quiz':
-            //If user completed the quiz
-            if(checkQuizCompletion($username)){
-                header('Content-Type: application/json');
-                echo json_encode(['success' => true]);
-            } else {
-                header('Content-Type: application/json');
-                echo json_encode(['success' => false]);
-            }
-            exit();
-            
-            
     }
 }

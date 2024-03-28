@@ -10,5 +10,5 @@
                 }
                 ?>!
             </h2>
-            <div id="button-start-quiz" class="btn btn-primary btn-lg" type="button" onclick="startTimer()">Start Quiz</div>
+            <div id="button-start-quiz" class="btn btn-primary btn-lg" type="button">Start Quiz</div>
         </div>

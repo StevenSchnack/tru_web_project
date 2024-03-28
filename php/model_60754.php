@@ -12,8 +12,6 @@ function isValidLogin($username, $password)
         return true;
     else
         return false;
-
-    
 }
 
 function createNewUser($username, $password, $email)
@@ -23,16 +21,15 @@ function createNewUser($username, $password, $email)
     $result = mysqli_query($conn, $sql);
 
     $scoreSql = "INSERT INTO user_scores (user_id) SELECT user_id FROM users WHERE username = '$username'";
-    if(!mysqli_query($conn, $scoreSql)){
+    if (!mysqli_query($conn, $scoreSql)) {
         return false;
     }
 
     $timeSql = "INSERT INTO user_times (user_id) SELECT user_id FROM users WHERE username = '$username'";
-    if(!mysqli_query($conn, $timeSql)){
+    if (!mysqli_query($conn, $timeSql)) {
         return false;
     }
     return $result;
-    
 }
 
 function isValidUsername($username)
@@ -45,8 +42,6 @@ function isValidUsername($username)
         return true;
     else
         return false;
-
-    
 }
 
 function deleteUser($username, $password)
@@ -54,36 +49,30 @@ function deleteUser($username, $password)
     global $conn;
     $userIdSql = "SELECT user_id FROM users WHERE username = '$username' AND password = '$password'";
     $result = mysqli_query($conn, $userIdSql);
-    if($result && mysqli_num_rows($result) > 0)
-    {
+    if ($result && mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result);
-        $userId = $row['user_id'];        
+        $userId = $row['user_id'];
         $scoresSql = "DELETE FROM user_scores WHERE user_id = $userId";
-        if(!mysqli_query($conn, $scoresSql)){
+        if (!mysqli_query($conn, $scoresSql)) {
             echo 'Could not delete user scores';
             return false;
         }
         $timesSql = "DELETE FROM user_times WHERE user_id = $userId";
-        if(!mysqli_query($conn, $timesSql)){
+        if (!mysqli_query($conn, $timesSql)) {
             echo 'Could not delete user times';
             return false;
         }
         $usersSql = "DELETE FROM users WHERE user_id = $userId";
-        if(mysqli_query($conn, $usersSql)){
+        if (mysqli_query($conn, $usersSql)) {
             return true;
-        }
-        else
-        {
+        } else {
             echo 'Could not delete user data';
             return false;
         }
-    }
-    else
-    {
+    } else {
         echo 'User not found or password was incorrect';
         return false;
     }
-
 }
 
 function forgotPassword($resetCode, $email)
@@ -92,12 +81,10 @@ function forgotPassword($resetCode, $email)
     $sql = "UPDATE users SET reset_code = $resetCode WHERE '$email' = email";
     mysqli_query($conn, $sql);
 
-    if(mysqli_affected_rows($conn) > 0)
+    if (mysqli_affected_rows($conn) > 0)
         return true;
     else
         return false;
-
-    
 }
 
 function resetPassword($resetCode, $newPassword)
@@ -106,51 +93,10 @@ function resetPassword($resetCode, $newPassword)
     $sql = "UPDATE users SET password = '$newPassword', reset_code = NULL WHERE reset_code = $resetCode";
     mysqli_query($conn, $sql);
 
-    if(mysqli_affected_rows($conn) > 0)
+    if (mysqli_affected_rows($conn) > 0)
         return true;
     else
         return false;
-
-    
-}
-
-function saveUserQuizResults($quizId, $username, $score, $time)
-{
-    global $conn;
-    $userIdSql = "SELECT user_id FROM users WHERE username = '$username'";
-    $userIdResult = mysqli_query($conn, $userIdSql);
-
-    if(mysqli_num_rows($userIdResult) > 0){
-        $row = mysqli_fetch_assoc($userIdResult);
-        $userId = $row['user_id'];
-
-        $userScoreExistSql = "SELECT user_id FROM user_scores WHERE user_id = $userId";
-        if(mysqli_query($conn, $userScoreExistSql))
-        {
-            $userScoreSql = "UPDATE user_scores SET quiz_" . $quizId . " = $score WHERE user_id = $userId";
-            if(!mysqli_query($conn, $userScoreSql))
-                echo "Could not update user scores";
-        }
-        else
-        {
-            echo "User does not exist in the scores table";
-        }
-        $userTimeExistSql = "SELECT user_id FROM user_times WHERE user_id = $userId";
-        if(mysqli_query($conn, $userTimeExistSql)){
-            $userTimeSql = "UPDATE user_times SET quiz_" . $quizId . " = '$time' WHERE user_id = $userId";
-            if(!mysqli_query($conn, $userTimeSql))
-                    echo "Could not update user times";
-        }
-        else
-        {
-            echo "User does not exist in the times table";
-        }  
-    }
-    else
-    {
-        echo "User does not exist in users table";
-    }
-    
 }
 
 function getUserSummary($username)
@@ -164,32 +110,32 @@ function getUserSummary($username)
     $scoreResult = mysqli_query($conn, $sqlScores);
     $timeResult = mysqli_query($conn, $sqlTimes);
 
-    if(mysqli_num_rows($scoreResult) == 0){
+    if (mysqli_num_rows($scoreResult) == 0) {
         return null;
     }
-    if(mysqli_num_rows($timeResult) == 0){
+    if (mysqli_num_rows($timeResult) == 0) {
         return null;
     }
 
     $scores = mysqli_fetch_assoc($scoreResult);
     $times = mysqli_fetch_assoc($timeResult);
-    
+
     $scoreCount = 0;
     $timeCount = 0;
     $totalScore = 0;
     $totalTime = 0;
-    foreach($scores as $score){
-        if($score != NULL){
-           $totalScore += $score;
-           $scoreCount++; 
+    foreach ($scores as $score) {
+        if ($score != NULL) {
+            $totalScore += $score;
+            $scoreCount++;
         }
     }
-    foreach($times as $time){
-        if($time != NULL){
-           $totalTime += $time;
-           $timeCount++; 
+    foreach ($times as $time) {
+        if ($time != NULL) {
+            $totalTime += $time;
+            $timeCount++;
         }
-    } 
+    }
     $averageScore = $scoreCount > 0 ? $totalScore / $scoreCount : 0;
     $averageTime = $timeCount > 0 ? $totalTime / $timeCount : 0;
     $summary = [
@@ -207,8 +153,7 @@ function getUserProfile($username)
     $sql = "SELECT email, reminder FROM users WHERE username = '$username'";
     $result = mysqli_query($conn, $sql);
 
-    if(mysqli_num_rows($result) > 0)
-    {
+    if (mysqli_num_rows($result) > 0) {
         return mysqli_fetch_assoc($result);
     }
 }
@@ -217,7 +162,7 @@ function toggleReminder($username, $reminder)
 {
     global $conn;
     $sql = "UPDATE users SET reminder = $reminder WHERE username = '$username'";
-    if(mysqli_query($conn, $sql))
+    if (mysqli_query($conn, $sql))
         return true;
     else
         return false;
@@ -227,12 +172,9 @@ function changePassword($username, $newPassword)
 {
     global $conn;
     $sql = "UPDATE users SET password = '$newPassword' WHERE username = '$username'";
-    if(mysqli_query($conn, $sql))
-    {
+    if (mysqli_query($conn, $sql)) {
         return true;
-    }
-    else
-    {
+    } else {
         echo 'Could not change password';
         return false;
     }
@@ -242,12 +184,9 @@ function changeEmail($username, $newEmail)
 {
     global $conn;
     $sql = "UPDATE users SET email = '$newEmail' WHERE username = '$username'";
-    if(mysqli_query($conn, $sql))
-    {
+    if (mysqli_query($conn, $sql)) {
         return true;
-    }
-    else
-    {
+    } else {
         echo 'Could not change email';
         return false;
     }
@@ -266,15 +205,14 @@ function checkQuizDate()
     $currentDate = new DateTime();
     $interval = $lastUpdated->diff($currentDate);
 
-    if($interval->days >= 7){
+    if ($interval->days >= 7) {
         $newQuizId = $quizId + 1;
         $updateSql = "UPDATE quiz_updates SET quiz_id = $newQuizId AND last_updated = CURRENT_DATE WHERE quiz_id = $quizId";
-        if(mysqli_query($conn, $updateSql))
+        if (mysqli_query($conn, $updateSql))
             return $newQuizId;
-
     }
-    
-    return $quizId;       
+
+    return $quizId;
 }
 
 
@@ -283,7 +221,7 @@ function getQuizData()
     global $conn;
     $quizId = checkQuizDate();
     $questions = [];
-    
+
     $quizSQL = "SELECT * FROM quizzes WHERE quiz_id = $quizId";
     $quizResult = mysqli_query($conn, $quizSQL);
     $quiz = mysqli_fetch_assoc($quizResult);
@@ -314,15 +252,14 @@ function getQuizData()
             'options' => $options
         ];
     }
-    
     return $quizData;
-    
 }
 
 function buildQuiz($quizData)
 {
-    $quizHTML = '';
+    $quizId = checkQuizDate();
     $questionCount = 1;
+    $quizHTML = '<h2 id="quiz-title" class="text-center" value="' . $quizId . '">Quiz ' . $quizId . '</h2>';
     foreach ($quizData['questions'] as $question) {
         $optionCount = 1;
         $quizHTML .= '<div class="question-content card">';
@@ -337,11 +274,11 @@ function buildQuiz($quizData)
         $quizHTML .= '</div>';
         //Body
         $quizHTML .= '<div class="card-text input-group">';
-        $quizHTML .= '<div class="row p-1 pt-2">';
+        $quizHTML .= '<div class="question row p-1 pt-2" question-value="' . $questionCount . '">';
 
         foreach ($question['options'] as $option) {
             $quizHTML .= '<div class="form-check">';
-            $quizHTML .= '<input id="quiz-option-' . $option['option_id'] . '" class="form-check-input" type="radio" name="quiz-question-' . $questionCount . '" value="' . $option['is_correct'] . '">';
+            $quizHTML .= '<input id="quiz-option-' . $option['option_id'] . '" class="form-check-input" type="radio" name="quiz-question-' . $questionCount . '" value="' . $option['is_correct'] . '" option-value="' . $optionCount . '">';
             $quizHTML .= '<label class="form-check-label" for="quiz-option-' . $option['option_id'] . '">' . $option['description'] . '</label>';
             $quizHTML .= '</div>';
             $optionCount++;
@@ -355,6 +292,96 @@ function buildQuiz($quizData)
     return $quizHTML;
 }
 
+function saveUserQuizResults($quizId, $username, $score, $time)
+{
+    global $conn;
+    $userIdSql = "SELECT user_id FROM users WHERE username = '$username'";
+    $userIdResult = mysqli_query($conn, $userIdSql);
+
+    if (mysqli_num_rows($userIdResult) > 0) {
+        $row = mysqli_fetch_assoc($userIdResult);
+        $userId = $row['user_id'];
+
+        $userScoreExistSql = "SELECT user_id FROM user_scores WHERE user_id = $userId";
+        if (mysqli_query($conn, $userScoreExistSql)) {
+            $userScoreSql = "UPDATE user_scores SET quiz_" . $quizId . " = $score WHERE user_id = $userId";
+            if (!mysqli_query($conn, $userScoreSql))
+                echo "Could not update user scores";
+        } else {
+            echo "User does not exist in the scores table";
+        }
+        $userTimeExistSql = "SELECT user_id FROM user_times WHERE user_id = $userId";
+        if (mysqli_query($conn, $userTimeExistSql)) {
+            $userTimeSql = "UPDATE user_times SET quiz_" . $quizId . " = '$time' WHERE user_id = $userId";
+            if (!mysqli_query($conn, $userTimeSql))
+                echo "Could not update user times";
+        } else {
+            echo "User does not exist in the times table";
+        }
+    } else {
+        echo "User does not exist in users table";
+    }
+}
+
+function saveQuizProgress($username, $quizProgress)
+{
+    global $conn;
+    $userIdSql = "SELECT user_id FROM users WHERE username = '$username'";
+    $idResult = mysqli_query($conn, $userIdSql);
+    if ($row = mysqli_fetch_assoc($idResult)) {
+        $userId = $row['user_id'];
+        $quizId = checkQuizDate();
+        $saveQuizSql = "SELECT quiz_id FROM quiz_saved WHERE quiz_id = $quizId AND user_id = $userId";
+        $quizResult = mysqli_query($conn, $saveQuizSql);
+
+        //If quiz already has saved progress
+        if (mysqli_num_rows($quizResult) > 0) {
+            $updateSql = "UPDATE quiz_saved SET progress = '$quizProgress' WHERE quiz_id = $quizId AND user_id = $userId";
+            if (mysqli_query($conn, $updateSql)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        //If there is no quiz progress already saved
+        else {
+            $insertSql = "INSERT INTO quiz_saved (user_id, quiz_id, progress) VALUES ($userId, $quizId, '$quizProgress')";
+            if (mysqli_query($conn, $insertSql)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    } else {
+        return false;
+    }
+}
+
+function getQuizProgress($username)
+{
+    global $conn;
+    $quizId = checkQuizDate();
+    $userIdSql = "SELECT user_id FROM users WHERE username = '$username'";
+    $idResult = mysqli_query($conn, $userIdSql);
+
+    if ($row = mysqli_fetch_assoc($idResult)) {
+        $userId = $row['user_id'];
+        $getSql = "SELECT progress FROM quiz_saved WHERE user_id = $userId AND quiz_id = $quizId";
+        $getResult = mysqli_query($conn, $getSql);
+
+        if ($row = mysqli_fetch_assoc($getResult)) {
+            $quizProgress = $row['progress'];
+            return $quizProgress;
+
+        } else {
+            return null;
+        }
+        
+    } else {
+        return null;
+    }
+}
+
 function getLeaderboardData()
 {
     $userScores = [];
@@ -363,35 +390,35 @@ function getLeaderboardData()
     global $conn;
     $usersScoreSql = "SELECT user_id, quiz_" . $quizId . " FROM user_scores WHERE quiz_" . $quizId . " IS NOT NULL ORDER BY quiz_" . $quizId . " DESC";
     $usersScoreResult = mysqli_query($conn, $usersScoreSql);
-    while($row = mysqli_fetch_assoc($usersScoreResult)){
+    while ($row = mysqli_fetch_assoc($usersScoreResult)) {
         $userScores[] = $row;
     }
 
     $usersTimeSql = "SELECT user_id, quiz_" . $quizId . " FROM user_times WHERE quiz_" . $quizId . " IS NOT NULL ORDER BY quiz_" . $quizId . " DESC";
     $usersTimeResult = mysqli_query($conn, $usersTimeSql);
-    while($row = mysqli_fetch_assoc($usersTimeResult)){
+    while ($row = mysqli_fetch_assoc($usersTimeResult)) {
         $userTimes[] = $row;
     }
 
     //Converting user_id to username and quiz_# to score/time
     $newUserScores = [];
     $newUserTimes = [];
-    foreach($userScores as $userScore){
+    foreach ($userScores as $userScore) {
         $userId = $userScore['user_id'];
         $score = $userScore['quiz_' . $quizId];
         $sql = "SELECT username FROM users WHERE user_id = $userId";
         $result = mysqli_query($conn, $sql);
-        if($row = mysqli_fetch_assoc($result)){
+        if ($row = mysqli_fetch_assoc($result)) {
             $username = $row['username'];
             $newUserScores[] = ['username' => $username, 'score' => $score];
         }
     }
-    foreach($userTimes as $userTime){
+    foreach ($userTimes as $userTime) {
         $userId = $userTime['user_id'];
         $time = $userTime['quiz_' . $quizId];
         $sql = "SELECT username FROM users WHERE user_id = $userId";
         $result = mysqli_query($conn, $sql);
-        if($row = mysqli_fetch_assoc($result)){
+        if ($row = mysqli_fetch_assoc($result)) {
             $username = $row['username'];
             $newUserTimes[] = ['username' => $username, 'time' => $time];
         }
@@ -409,7 +436,7 @@ function buildLeaderboard($leaderboardData)
 {
     $lbHTML = '';
     $lbCount = 1;
-    
+
     //Card
     $lbHTML .= '<div class="card">';
     //Header
@@ -434,8 +461,8 @@ function buildLeaderboard($leaderboardData)
         $userScore = $userScores['score'];
         $userTime = null;
         //Get user times
-        foreach($leaderboardData['times'] as $userTimes){
-            if($userTimes['username'] == $userName){
+        foreach ($leaderboardData['times'] as $userTimes) {
+            if ($userTimes['username'] == $userName) {
                 $userTime = $userTimes['time'];
                 break;
             }
@@ -448,11 +475,11 @@ function buildLeaderboard($leaderboardData)
         $lbHTML .= '</tr>';
         $lbCount++;
     }
-    $lbHTML .= '</tbody></table></div></div>';                    
+    $lbHTML .= '</tbody></table></div></div>';
 
     return $lbHTML;
 }
-function convertSecondsToString($seconds) 
+function convertSecondsToString($seconds)
 {
     $minutes = floor($seconds / 60);
     $seconds = floor($seconds % 60);
@@ -470,17 +497,15 @@ function checkQuizCompletion($username)
     $quizId = checkQuizDate();
     $userIdSql = "SELECT user_id FROM users WHERE username = '$username'";
     $result = mysqli_query($conn, $userIdSql);
-    if($row = mysqli_fetch_assoc($result)){
+    if ($row = mysqli_fetch_assoc($result)) {
         $userId = $row['user_id'];
         $checkQuizSql = "SELECT quiz_" . $quizId . " FROM user_scores WHERE user_id = $userId AND quiz_" . $quizId . " IS NOT NULL";
         $result = mysqli_query($conn, $checkQuizSql);
-        if($row = mysqli_num_rows($result) > 0){
-            echo 'User has completed quiz';
-            return true;
+        if (mysqli_num_rows($result) > 0) {
+            return true; //Completed
         } else {
-            echo 'User has not completed quiz';
-            return false;
+            return false; //Not Completed
         }
     }
-    echo 'User not found';
+    return false; //User not found
 }
