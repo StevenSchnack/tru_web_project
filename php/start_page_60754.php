@@ -436,9 +436,17 @@ if (!isset($_SERVER['HTTPS'])) {
                         if (!obj.completed) {
                             $.get('main_page_quiz_60754.php', function(quizContent) {
                                 $('#div-center-content').html(quizContent);
-                                $('#div-content-quiz').html(obj.data);
+                                $('#div-content-quiz').html(obj.data.quizHTML);
                                 $('#button-submit-quiz').prop('disabled', false);
                                 $('#button-save-quiz').prop('disabled', false);
+                                if('quizProgress' in obj.data){
+                                    var quizProg = JSON.parse(obj.data.quizProgress);
+                                    $('.question').each(function(){
+                                        foreach(quizProg as question => option)
+                                        if($(this).attr('question-value') =)
+                                    })
+                                    console.log(quizProg);
+                                }
                                 startTimer();
                             });
                         } else if (obj.completed) {

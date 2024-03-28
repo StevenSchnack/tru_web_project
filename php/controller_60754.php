@@ -101,15 +101,30 @@ else if ($_POST['page'] == 'page-main') {
             exit();
 
         case 'start-quiz':
+            $response = []; 
             $quizData = getQuizData();
             $quizHTML = buildQuiz($quizData);
+            $quizProgress = getQuizProgress($username);
+
+            //User has already completed the quiz
             if (checkQuizCompletion($username)) {
                 header('Content-Type: application/json');
                 echo json_encode(['success' => true, 'completed' => true]);
+                exit();
             } else {
-                header('Content-Type: application/json');
-                echo json_encode(['success' => true, 'completed' => false, 'data' => $quizHTML]);
+            //If quiz is not completed
+                $response['quizHTML'] = $quizHTML;
             }
+            //If theres quiz progress
+            if (isset($quizProgress)) {
+                $response['quizProgress'] = $quizProgress;
+            }
+            header('Content-Type: application/json');
+            echo json_encode([
+                'success' => true,
+                'completed' => false,
+                'data' => $response
+            ]);
             exit();
 
         case 'save-quiz':
@@ -121,6 +136,11 @@ else if ($_POST['page'] == 'page-main') {
                 header('Content-Type: application/json');
                 echo json_encode(['success' => false, 'message' => 'Failed to save quiz data']);
             }
+            exit();
+
+        case 'get-quiz':
+            $quizProgress = getQuizProgress($username);
+
             exit();
 
         case 'submit-quiz':
