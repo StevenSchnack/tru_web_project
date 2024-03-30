@@ -1,5 +1,5 @@
         <!--Center Content-->
-        <div id="div-home-content" class="text-center pt-4">
+        <div id="div-home-content" class="text-center pt-4 p-3">
             <h2 id="start-welcome-text" class="pt-4 p-2">
                 <?php
                 session_start();
@@ -10,5 +10,5 @@
                 }
                 ?>!
             </h2>
-            <div id="button-start-quiz" class="btn btn-primary btn-lg" type="button">Start Quiz</div>
+            <div id="button-start-quiz" class="btn btn-primary btn-lg p-3" type="button">Start Quiz</div>
         </div>

@@ -52,16 +52,25 @@ function deleteUser($username, $password)
     if ($result && mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result);
         $userId = $row['user_id'];
+        //Delete saved progress
+        $progressSql = "DELETE FROM quiz_saved WHERE user_id = $userId";
+        if (!mysqli_query($conn, $progressSql)) {
+            echo 'Could not delete user progress';
+            return false;
+        }
+        //Delete scores
         $scoresSql = "DELETE FROM user_scores WHERE user_id = $userId";
         if (!mysqli_query($conn, $scoresSql)) {
             echo 'Could not delete user scores';
             return false;
         }
+        //Delete times
         $timesSql = "DELETE FROM user_times WHERE user_id = $userId";
         if (!mysqli_query($conn, $timesSql)) {
             echo 'Could not delete user times';
             return false;
         }
+        //Delete user
         $usersSql = "DELETE FROM users WHERE user_id = $userId";
         if (mysqli_query($conn, $usersSql)) {
             return true;
@@ -175,7 +184,6 @@ function changePassword($username, $newPassword)
     if (mysqli_query($conn, $sql)) {
         return true;
     } else {
-        echo 'Could not change password';
         return false;
     }
 }
@@ -187,7 +195,6 @@ function changeEmail($username, $newEmail)
     if (mysqli_query($conn, $sql)) {
         return true;
     } else {
-        echo 'Could not change email';
         return false;
     }
 }
@@ -207,7 +214,7 @@ function checkQuizDate()
 
     if ($interval->days >= 7) {
         $newQuizId = $quizId + 1;
-        $updateSql = "UPDATE quiz_updates SET quiz_id = $newQuizId AND last_updated = CURRENT_DATE WHERE quiz_id = $quizId";
+        $updateSql = "UPDATE quiz_updates SET quiz_id = $newQuizId, last_updated = CURRENT_DATE WHERE quiz_id = $quizId";
         if (mysqli_query($conn, $updateSql))
             return $newQuizId;
     }
@@ -215,6 +222,26 @@ function checkQuizDate()
     return $quizId;
 }
 
+function decreaseDateByWeek()
+{
+    global $conn;
+    $getDateSql = "SELECT last_updated FROM quiz_updates";
+    $result = mysqli_query($conn, $getDateSql);
+    if ($row = mysqli_fetch_assoc($result)) {
+        $date = new DateTime($row['last_updated']);
+        $date->modify('-7 days');
+        $newDate = $date->format('Y-m-d');
+        $setDateSql = "UPDATE quiz_updates SET last_updated = '$newDate'";
+        if (mysqli_query($conn, $setDateSql)) {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+    return false;
+}
 
 function getQuizData()
 {
@@ -303,20 +330,30 @@ function saveUserQuizResults($quizId, $username, $score, $time)
         $userId = $row['user_id'];
 
         $userScoreExistSql = "SELECT user_id FROM user_scores WHERE user_id = $userId";
-        if (mysqli_query($conn, $userScoreExistSql)) {
+        $userScoreExistResult = mysqli_query($conn, $userScoreExistSql);
+        if (mysqli_num_rows($userScoreExistResult) > 0) {
             $userScoreSql = "UPDATE user_scores SET quiz_" . $quizId . " = $score WHERE user_id = $userId";
             if (!mysqli_query($conn, $userScoreSql))
                 echo "Could not update user scores";
         } else {
-            echo "User does not exist in the scores table";
+            $userScoreSql = "INSERT INTO user_scores (user_id, quiz_" . $quizId . ") VALUES ($userId, $score)";
+            if (!mysqli_query($conn, $userScoreSql))
+                echo "Could not insert user scores";
         }
         $userTimeExistSql = "SELECT user_id FROM user_times WHERE user_id = $userId";
-        if (mysqli_query($conn, $userTimeExistSql)) {
+        $userTimeExistResult = mysqli_query($conn, $userTimeExistSql);
+        if (mysqli_num_rows($userTimeExistResult) > 0) {
             $userTimeSql = "UPDATE user_times SET quiz_" . $quizId . " = '$time' WHERE user_id = $userId";
             if (!mysqli_query($conn, $userTimeSql))
                 echo "Could not update user times";
         } else {
-            echo "User does not exist in the times table";
+            $userTimeSql = "INSERT INTO user_times (user_id, quiz_" . $quizId . ") VALUES ($userId, '$time')";
+            if (!mysqli_query($conn, $userTimeSql))
+                echo "Could not insert user times";
+        }
+        $userSavedProgressSql = "DELETE FROM quiz_saved WHERE user_id = $userId";
+        if(!mysqli_query($conn, $userSavedProgressSql)){
+            echo "Could not delete user progress";
         }
     } else {
         echo "User does not exist in users table";
@@ -372,11 +409,9 @@ function getQuizProgress($username)
         if ($row = mysqli_fetch_assoc($getResult)) {
             $quizProgress = $row['progress'];
             return $quizProgress;
-
         } else {
             return null;
         }
-        
     } else {
         return null;
     }

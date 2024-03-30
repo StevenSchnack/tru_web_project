@@ -33,11 +33,12 @@
                             <input id="profile-set-reminder" name="set-reminder" class="d-inline form-check-input" type="checkbox" role="switch">
                         </li>
                     </ul>
-                    <div class="row justify-content-center pt-5">
+                    <div class="row justify-content-center pt-2">
                         <div class="col col-auto text-center">
                             <button id="button-delete-user" type="button" class="btn btn-danger">Delete Account</button>
                             <button id="button-cancel-changes" type="reset" class="btn btn-secondary">Cancel</button>
                             <button id="button-apply-changes" type="submit" class="btn btn-success">Apply Changes</button>
+                            <button id="button-increase-date" type="button" class="btn btn-warning">Jump Back 1 Week</button>
                         </div>
                     </div>
                 </form>

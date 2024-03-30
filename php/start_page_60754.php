@@ -13,13 +13,14 @@ if (!isset($_SERVER['HTTPS'])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
     <!--Header-->
     <div id="div-home-header" class="container-fluid p-5 text-bg-dark rounded-0 rounded-bottom">
-        <h2 class="text-center">Welcome to Quizzle</h2>
+        <h2 class="text-center">Quizzle</h2>
         <h4 class="text-center"> New quizzes weekly!</h4>
     </div>
 
@@ -153,7 +154,7 @@ if (!isset($_SERVER['HTTPS'])) {
             </div>
         </div>
 
-        <!-- Submission Modal-->
+        <!-- Quiz Submission Modal-->
         <div id="modal-quiz-results" class="modal fade pt-5">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -170,7 +171,7 @@ if (!isset($_SERVER['HTTPS'])) {
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <input type="button" class="btn btn-warning" value="Share">
+                        <input id="button-send-email" type="button" class="btn btn-warning" value="Email">
                         <input type="button" class="btn btn-primary" data-bs-dismiss="modal" value="Continue">
                     </div>
                 </div>
@@ -290,6 +291,7 @@ if (!isset($_SERVER['HTTPS'])) {
                                     break;
 
                                 case 'form-delete-user':
+                                    alert(response.message);
                                     <?php
                                     session_unset();
                                     session_destroy();
@@ -299,13 +301,13 @@ if (!isset($_SERVER['HTTPS'])) {
 
 
                                 case 'form-change-profile':
-
-
-                                case 'form-quiz-results':
-
+                                    var removeEsc = response.message.replace(/\\n/g, '\n');
+                                    alert(removeEsc);
+                                    break;
                             }
                         } else {
-                            alert(response.message);
+                            var formattedMessage = response.message.replace(/\\n/g, '\n');
+                            alert(formattedMessage);
                         }
                     },
                     error: function(xhr, status, error) {
@@ -341,7 +343,7 @@ if (!isset($_SERVER['HTTPS'])) {
                             }, 'json');
                         });
                         break;
-
+                    
                     case 'nav-button-summary':
                         $.get('main_page_summary_60754.php', function(summaryContent) {
                             $('#div-center-content').html(summaryContent);
@@ -357,7 +359,7 @@ if (!isset($_SERVER['HTTPS'])) {
                             }, 'json');
                         });
                         break;
-
+                    
                     case 'nav-button-leaderboard':
                         $.get('main_page_leaderboard_60754.php', function(leaderboardContent) {
                             $('#div-center-content').html(leaderboardContent);
@@ -422,6 +424,22 @@ if (!isset($_SERVER['HTTPS'])) {
                 $('#modal-delete-user').modal('show');
             });
 
+            //Increase Date by 8 days
+            $(document).on('click', '#button-increase-date', function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: 'controller_60754.php',
+                    type: 'POST',
+                    data: {
+                        page: 'page-main',
+                        command: 'increase-date'
+                    },
+                    success: function(response) {
+                        console.log(response);
+                    }
+                });
+            });
+
             //Start Quiz
             $(document).on('click', '#button-start-quiz', function() {
                 $.ajax({
@@ -439,15 +457,24 @@ if (!isset($_SERVER['HTTPS'])) {
                                 $('#div-content-quiz').html(obj.data.quizHTML);
                                 $('#button-submit-quiz').prop('disabled', false);
                                 $('#button-save-quiz').prop('disabled', false);
-                                if('quizProgress' in obj.data){
-                                    var quizProg = JSON.parse(obj.data.quizProgress);
-                                    $('.question').each(function(){
-                                        foreach(quizProg as question => option)
-                                        if($(this).attr('question-value') =)
-                                    })
-                                    console.log(quizProg);
-                                }
                                 startTimer();
+                                //If quiz progress is found
+                                if ('quizProgress' in obj.data) {
+                                    var quizProg = JSON.parse(obj.data.quizProgress);
+                                    seconds = quizProg['time'];
+                                    answerCount = 0;
+                                    console.log(quizProg);
+                                    $('.question').each(function() {
+                                        var questionId = $(this).attr('question-value');
+                                        $(this).find('input[type="radio"]').each(function() {
+                                            if ($(this).attr('option-value') == quizProg[questionId]) {
+                                                $(this).prop('checked', true);
+                                                answerCount++;
+                                            }
+                                        });
+                                    });
+                                    $('#right-content-answered').text('Answered: ' + answerCount + '/10');
+                                }
                             });
                         } else if (obj.completed) {
                             $.get('main_page_quiz_60754.php', function(quizContent) {
@@ -459,6 +486,14 @@ if (!isset($_SERVER['HTTPS'])) {
                         console.error('Error:', error);
                     }
                 });
+            });
+            //Send Email
+            $(document).on('click', '#button-send-email', function() {
+                var quizPercent = $('#quiz-percent').val();
+                var quizNum = $('#quiz-title').val();
+                const subject = encodeURIComponent('My Quiz Results');
+                const body = encodeURIComponent('I wanted to share my quiz results with you! I scored ' + quizPercent + '% on the latest Quiz!');
+                window.location.href = `mailto:?subject=${subject}&body=${body}`;
             })
 
             //Quiz Radio Button Count
@@ -472,31 +507,8 @@ if (!isset($_SERVER['HTTPS'])) {
                 })
                 console.log(answered);
                 $('#right-content-answered').text('Answered: ' + answered + '/10');
-            })
+            });
         });
-        //Check if user has completed the quiz
-
-        // $(document).ready(function() {
-        //     $.ajax({
-        //         url: 'controller_60754.php',
-        //         type: 'POST',
-        //         data: {
-        //             page: 'page-main',
-        //             command: 'lock-quiz'
-        //         },
-        //         dataType: 'json',
-        //         success: function(response) {
-        //             console.log(response);
-        //             if (response.success === true) {
-        //                 $('.form-check input[type="radio"]').prop('disabled', true);
-        //             }
-        //         },
-        //         error: function(xhr, status, error) {
-        //             console.error("Error occurred: " + error);
-        //         }
-        //     });
-        // });
-
 
         $('#button-login').click(function() {
             $('#modal-login').modal('show');
@@ -567,28 +579,6 @@ if (!isset($_SERVER['HTTPS'])) {
                 string = avgMinutes + ':' + avgSeconds;
             return string;
         }
-
-        // $.get('controller_60754.php', function(response) {
-        //     if (response.status === "logged_in") {
-        //         $.get('main_page_home_60754.php', function(homeContent) {
-        //             $('#div-center-content').html(homeContent);
-        //         });
-
-        //         $.get('left_content.php', function(leftContent) {
-        //             $('#div-left-content').html(leftContent);
-        //         });
-
-        //         $.get('left_content_sm.php', function(leftContentSm) {
-        //             $('#div-left-content-sm').html(leftContentSm);
-        //         });
-
-        //         $.get('right_content.php', function(rightContent) {
-        //             $('#div-right-content').html(rightContent);
-        //         });
-        //     } else {
-        //         window.location.href = 'start_page_60754.php';
-        //     }
-        // }, 'json');
     </script>
 </body>
 

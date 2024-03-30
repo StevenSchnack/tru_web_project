@@ -9,13 +9,6 @@ if (empty($_POST['page'])) {
     exit();
 }
 
-// if (isset($_SESSION['signedin']) && $_SESSION['signedin'] === 'YES') {
-//     echo json_encode(['status' => 'logged_in']);
-// } else {
-//     echo json_encode(['status' => 'not_logged_in']);
-// }
-// exit();
-
 //If Login/Signup/Reset Password
 if ($_POST['page'] == 'page-start') {
     switch ($_POST['command']) {
@@ -138,11 +131,6 @@ else if ($_POST['page'] == 'page-main') {
             }
             exit();
 
-        case 'get-quiz':
-            $quizProgress = getQuizProgress($username);
-
-            exit();
-
         case 'submit-quiz':
             $correct = 0;
             $time = $_POST['time'];
@@ -182,24 +170,23 @@ else if ($_POST['page'] == 'page-main') {
             exit();
 
         case 'change-profile':
-            $response = [];
-
+            $message = '';
             // Change password
             if (!empty($_POST['new-password'])) {
                 $newPassword = hash('sha256', $_POST['new-password']);
                 if (changePassword($username, $newPassword)) {
-                    $response['passwordChange'] = ['success' => true, 'message' => 'Password change successful'];
+                    $message .= 'Password change successful.\n';
                 } else {
-                    $response['passwordChange'] = ['success' => false, 'message' => 'Password change has failed'];
+                    $message .= 'Password change has failed.\n';
                 }
             }
             // Change email
             if (!empty($_POST['new-email'])) {
                 $newEmail = $_POST['new-email'];
                 if (changeEmail($username, $newEmail)) {
-                    $response['emailChange'] = ['success' => true, 'message' => 'Email change successful'];
+                    $message .= 'Email change successful.\n';
                 } else {
-                    $response['emailChange'] = ['success' => false, 'message' => 'Email change has failed'];
+                    $message .= 'Email change has failed.\n';
                 }
             }
             //Set reminder
@@ -208,12 +195,12 @@ else if ($_POST['page'] == 'page-main') {
                 $reminder = 1;
 
             if (toggleReminder($username, $reminder)) {
-                $response['setReminder'] = ['success' => true, 'message' => 'Reminder change successful'];
+                $message .= 'Reminder change successful.\n';
             } else {
-                $response['setReminder'] = ['success' => false, 'message' => 'Reminder change has failed'];
+                $message .= 'Reminder change has failed.\n';
             }
             header('Content-Type: application/json');
-            echo json_encode($response);
+            echo json_encode(['success' => true, 'message' => $message]);
             exit();
 
         case 'delete-user':
@@ -224,6 +211,17 @@ else if ($_POST['page'] == 'page-main') {
             } else {
                 header('Content-Type: application/json');
                 echo json_encode(['success' => false, 'message' => 'User could not be deleted']);
+            }
+            exit();
+
+        case 'increase-date':
+            if(decreaseDateByWeek()){
+                header('Content-Type: application/json');
+                echo json_encode(['success' => true, 'message' => 'Date was decreased by a week']);
+            }
+            else{
+                header('Content-Type: application/json');
+                echo json_encode(['success' => false, 'message' => 'Date could not be decreased']);
             }
             exit();
     }

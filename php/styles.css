@@ -42,7 +42,7 @@
     max-width: 700px;
     margin: auto;
     margin-bottom: 10px;
-    background-color: rgb(223, 242, 255);
+    background-color: rgb(244, 252, 255);
 }
 
 .question-content > h4{
@@ -149,7 +149,7 @@
     #div-right-content {
         position: static;
         width: 80%;
-        margin-top: 40px; /*Delete if pages are messed up*/
+        margin-top: 40px; 
     }
 
     #div-right-content .container {
